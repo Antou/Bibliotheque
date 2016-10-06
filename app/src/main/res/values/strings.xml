@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Bibliotheque</string>
+    <string name="book_image">/home/m1/cuvilliers/Images/pp</string>
+    <string name="title_activity_main">MainActivity</string>
+</resources>
