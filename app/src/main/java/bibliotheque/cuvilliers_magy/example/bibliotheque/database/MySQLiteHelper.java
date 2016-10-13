@@ -26,7 +26,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "CREATE TABLE livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
 
     public static final String DATABASE_INSERT = "" +
-            "INSERT INTO livre VALUES (273, \"David Lopez\", \"La calotte de tes morts\");\n";
+            "INSERT INTO livre VALUES (220, \"Joe Lopez\", \"Je fais 75 kilos\");\n";
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
