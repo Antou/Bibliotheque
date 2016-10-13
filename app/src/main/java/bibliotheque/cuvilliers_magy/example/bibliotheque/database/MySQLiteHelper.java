@@ -26,7 +26,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "CREATE TABLE livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
 
     public static final String DATABASE_INSERT = "" +
-            "INSERT INTO livre VALUES (259, \"JUL\", \"ça fait 5 ans que j'nique le game\");\n";
+            "INSERT INTO livre VALUES (273, \"David Lopez\", \"La calotte de tes morts\");\n";
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -74,7 +74,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
         // Close the cursor
         cursor.close();
-        Log.d("MAP", listOfBook.toString());
         return listOfBook;
     }
 }
