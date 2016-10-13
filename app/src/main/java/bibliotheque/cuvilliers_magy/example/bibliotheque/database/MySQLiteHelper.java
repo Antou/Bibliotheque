@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
-import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
-import bibliotheque.cuvilliers_magy.example.bibliotheque.model.BookCollection;
 
 /**
  * Created by magy on 06/10/16.
@@ -48,6 +45,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     public List<Map<String, String>> getAllBooks(){
+
         String[] columns = new String[3];
         columns[0] = "id";
         columns[1] = "titre";
@@ -65,7 +63,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             String titre = cursor.getString(1);
             String auteur = cursor.getString(2);
 
-            Map<String, String> bookMap = new HashMap<String, String>();
+            Map<String, String> bookMap = new HashMap<>();
             bookMap.put("img", String.valueOf(R.mipmap.ic_launcher)); // use available img
             bookMap.put("author", auteur);
             bookMap.put("title", titre);
