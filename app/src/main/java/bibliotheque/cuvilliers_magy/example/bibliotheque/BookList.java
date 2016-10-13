@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.model.DetailFragment;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.model.MyListFragment;
 
-public class BookList extends AppCompatActivity {
+public class BookList extends AppCompatActivity implements MyListFragment.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +26,17 @@ public class BookList extends AppCompatActivity {
 
         listOfBook = dbhelper.getAllBooks();
 
-        SimpleAdapter listAdapter = new SimpleAdapter(this.getBaseContext(), listOfBook, R.layout.book_detail,
+       /* SimpleAdapter listAdapter = new SimpleAdapter(this.getBaseContext(), listOfBook, R.layout.book_detail,
                 new String[] {"img", "author", "title", "isbn"},
                 new int[] {R.id.img, R.id.author, R.id.title, R.id.isbn});
 
-        bookList.setAdapter(listAdapter);
+        bookList.setAdapter(listAdapter); */
+    }
+
+    @Override
+    public void onRssItemSelected(String link) {
+        DetailFragment fragment = (DetailFragment) getFragmentManager()
+                .findFragmentById(R.id.detailFragment);
+        fragment.setText(link);
     }
 }
