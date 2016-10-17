@@ -23,15 +23,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase database;
     public static final String DATABASE_CREATE = "" +
-            "CREATE TABLE livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
+            "CREATE TABLE IF NOT EXISTS livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
 
     public static final String DATABASE_INSERT = "" +
-            "INSERT INTO livre VALUES (259, \"JUL\", \"ça fait 5 ans que j'nique le game\");\n";
+            "INSERT INTO livre VALUES (259, \"Booba\", \"Mon petit ourson\")," +
+            "(236, \"Titeuf\", \"C'est po juste\");\n";
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         database = super.getReadableDatabase();
-        //database.execSQL(DATABASE_INSERT);
+        database.execSQL(DATABASE_CREATE);
+        database.execSQL(DATABASE_INSERT);
     }
 
     @Override
