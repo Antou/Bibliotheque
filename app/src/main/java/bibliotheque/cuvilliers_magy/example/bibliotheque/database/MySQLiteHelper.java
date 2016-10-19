@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /**
  * Created by magy on 06/10/16.
@@ -33,7 +34,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         database = super.getReadableDatabase();
         database.execSQL(DATABASE_CREATE);
-        database.execSQL(DATABASE_INSERT);
+        //database.execSQL(DATABASE_INSERT);
     }
 
     @Override
@@ -46,37 +47,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public List<Map<String, String>> getAllBooks(){
+    public ArrayList<Book> getAllBooks(){
 
         String[] columns = new String[3];
         columns[0] = "id";
-        columns[1] = "titre";
-        columns[2] = "auteur";
+        columns[1] = "auteur";
+        columns[2] = "titre";
 
         Cursor cursor = database.query("livre", columns,
         null, null, null, null, null, null);
 
-        List<Map<String, String>> listOfBook = new ArrayList<Map<String, String>>();
+        ArrayList<Book> bookList = new ArrayList<>();
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
-            Log.d("TEST", database.toString());
             int id = cursor.getInt(0);
             String titre = cursor.getString(1);
             String auteur = cursor.getString(2);
 
-            Map<String, String> bookMap = new HashMap<>();
-            bookMap.put("img", String.valueOf(R.mipmap.ic_launcher)); // use available img
-            bookMap.put("author", auteur);
-            bookMap.put("title", titre);
-            bookMap.put("isbn", Integer.toString(id));
+            Book currentBook = new Book(auteur, titre, Integer.toString(id));
+            bookList.add(currentBook);
 
-            listOfBook.add(bookMap);
             cursor.moveToNext();
         }
         // Close the cursor
         cursor.close();
-        Log.d("MAP", listOfBook.toString());
-        return listOfBook;
+        return bookList;
     }
 }
