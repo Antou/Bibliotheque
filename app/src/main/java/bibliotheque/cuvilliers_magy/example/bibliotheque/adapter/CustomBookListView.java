@@ -1,6 +1,9 @@
 package bibliotheque.cuvilliers_magy.example.bibliotheque.adapter;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -10,6 +13,7 @@ import java.util.ArrayList;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.fragment.BookDetailFragment;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /**
@@ -46,7 +50,16 @@ public class CustomBookListView extends Activity {
     public void onItemClick(int mPosition)
     {
         Book book = bookList.get(mPosition);
-        Toast.makeText(customListView,
-                ""+book.getTitle(), Toast.LENGTH_LONG).show();
+        this.detailBookFragment(book);
+    }
+
+    public void detailBookFragment(Book book){
+        FragmentManager fm = this.getFragmentManager();
+        FragmentTransaction fTransaction = fm.beginTransaction();
+
+        BookDetailFragment bookFragment = new BookDetailFragment();
+        bookFragment.setBook(book);
+        fTransaction.replace(R.id.bookFragment, bookFragment);
+        fTransaction.commit();
     }
 }
