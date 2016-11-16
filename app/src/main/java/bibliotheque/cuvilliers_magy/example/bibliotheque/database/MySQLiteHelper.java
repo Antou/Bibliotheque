@@ -24,11 +24,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase database;
     public static final String DATABASE_CREATE = "" +
-            "CREATE TABLE IF NOT EXISTS livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
+            "CREATE TABLE IF NOT EXISTS livre (id integer primary key, titre VARCHAR(30)," +
+            "auteur VARCHAR(30), resume VARCHAR(300));\n";
 
     public static final String DATABASE_INSERT = "" +
-            "INSERT INTO livre VALUES (259, \"Booba\", \"Mon petit ourson\")," +
-            "(236, \"Titeuf\", \"C'est po juste\");\n";
+            "INSERT INTO livre VALUES (1, \"Booba le petit ourson\", \"Christophe\", \"Les aventures de l'ourson Booba\")," +
+            "(2, \"Titeuf : Po Juste\", \"ZEP\", \"Titeuf de retour pour de nouvelles bêtises\");\n";
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -51,8 +52,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         String[] columns = new String[3];
         columns[0] = "id";
-        columns[1] = "auteur";
-        columns[2] = "titre";
+        columns[1] = "titre";
+        columns[2] = "auteur";
 
         Cursor cursor = database.query("livre", columns,
         null, null, null, null, null, null);

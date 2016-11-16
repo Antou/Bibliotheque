@@ -78,8 +78,8 @@ public class BookAdapter extends BaseAdapter implements View.OnClickListener {
 
             holder = new ViewHolder();
             holder.title = (TextView) vi.findViewById(R.id.title);
-            holder.author=(TextView)vi.findViewById(R.id.author);
-            holder.image=(ImageView)vi.findViewById(R.id.image);
+            holder.author = (TextView)vi.findViewById(R.id.author);
+            holder.image = (ImageView)vi.findViewById(R.id.image);
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
