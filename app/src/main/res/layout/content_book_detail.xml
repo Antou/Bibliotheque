@@ -13,4 +13,9 @@
     tools:context="bibliotheque.cuvilliers_magy.example.bibliotheque.activities.BookDetail"
     tools:showIn="@layout/activity_book_detail">
 
+    <TextView
+        android:id="@+id/bookTitlePortrait"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>

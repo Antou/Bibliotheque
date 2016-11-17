@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.activities.CustomBookListView;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/

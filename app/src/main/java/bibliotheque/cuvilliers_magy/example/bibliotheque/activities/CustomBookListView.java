@@ -1,8 +1,10 @@
 package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -54,13 +56,11 @@ public class CustomBookListView extends Activity {
     }
 
     public void detailBookFragment(Book book){
-
         int orientation = getResources().getConfiguration().orientation;
-
         if (orientation == Configuration.ORIENTATION_PORTRAIT){
-            return;
+            // Redirecting to another activity
+            this.showBookDetailPortrait(book);
         }
-
         else {
             FragmentManager fm = this.getFragmentManager();
             FragmentTransaction fTransaction = fm.beginTransaction();
@@ -69,6 +69,30 @@ public class CustomBookListView extends Activity {
             bookFragment.setBook(book);
             fTransaction.replace(R.id.bookFragment, bookFragment);
             fTransaction.commit();
+        }
+    }
+
+    public void showBookDetailPortrait(Book book){
+        Intent intent = new Intent(this, BookDetail.class);
+        intent.putExtra("Title", book.getTitle());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Landscape mode
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            // Portrait mode (must destroy fragment)
+            FragmentManager fm = this.getFragmentManager();
+            FragmentTransaction fTransaction = fm.beginTransaction();
+            Fragment fragment = fm.findFragmentById(R.id.bookFragment);
+            if (fragment != null){
+                fTransaction.remove(fragment);
+                fTransaction.commit();
+            }
         }
     }
 }
