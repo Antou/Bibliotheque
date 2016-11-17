@@ -15,6 +15,7 @@
             android:layout_height="match_parent"
             />
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addBookButton"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_alignParentBottom="true"
@@ -24,45 +25,12 @@
             android:clickable="true" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/bookFragment"
-        android:tag="bookDetailFragment"
+    <include
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/titleFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start" />
-=======
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/authorFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/isbnFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/serieFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/genreFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/resumeFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/editeurFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+        android:orientation="vertical"
+        layout="@layout/book_detail">
+    </include>
 
 </LinearLayout>

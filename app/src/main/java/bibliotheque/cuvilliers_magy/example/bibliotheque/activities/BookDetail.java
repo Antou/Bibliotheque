@@ -20,11 +20,11 @@ public class BookDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_detail);
+        setContentView(R.layout.content_book_detail);
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
 
-        TextView bookTitle = (TextView) findViewById(R.id.bookTitlePortrait);
+        TextView bookTitle = (TextView) findViewById(R.id.titleFragment);
         bookTitle.setText(title);
     }
 

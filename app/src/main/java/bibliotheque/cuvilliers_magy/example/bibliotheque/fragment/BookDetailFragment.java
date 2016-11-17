@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
@@ -29,7 +30,8 @@ public class BookDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_liste_livres, container, false);
+        View view = inflater.inflate(R.layout.book_detail, container, false);
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             return view;
         }
