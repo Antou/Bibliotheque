@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 public class BookList extends AppCompatActivity {
 
@@ -25,29 +26,10 @@ public class BookList extends AppCompatActivity {
         MySQLiteHelper dbhelper = new MySQLiteHelper(this);
 
         ListView bookList = (ListView) findViewById(R.id.booklist);
-        List<Map<String, String>> listOfBook;
+        List<Book> listOfBook;
 
         listOfBook = dbhelper.getAllBooks();
 
-        final SimpleAdapter listAdapter = new SimpleAdapter(this.getBaseContext(), listOfBook, R.layout.book_detail,
-                new String[] {"img", "title", "author", "isbn"},
-                new int[] {R.id.img, R.id.title, R.id.author, R.id.isbn});
-
-        bookList.setAdapter(listAdapter);
-
-
-        // Adding event on Book (récupére le titre du livre)
-        bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Object item = listAdapter.getItem(position);
-                String title = ((Map<String, String>) item).get("title");
-                Toast.makeText(getApplicationContext(),
-                        "Title : " + title, Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
     }
 
 

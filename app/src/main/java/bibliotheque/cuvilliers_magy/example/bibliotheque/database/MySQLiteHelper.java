@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /**
  * Created by magy on 06/10/16.
@@ -23,14 +24,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase database;
     public static final String DATABASE_CREATE = "" +
-            "CREATE TABLE livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
+            "CREATE TABLE IF NOT EXISTS livre (id integer primary key, titre VARCHAR(30), auteur VARCHAR(30));\n";
 
     public static final String DATABASE_INSERT = "" +
-            "INSERT INTO livre VALUES (220, \"Joe Lopez\", \"Je fais 75 kilos\");\n";
+            "INSERT INTO livre VALUES (220, \"Joe Lopez\", \"Je fais 75 kilos\")," +
+            "   (236, \"Booba\", \"Mon petit ourson\");\n";
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         database = super.getReadableDatabase();
+        database.execSQL(DATABASE_CREATE);
         //database.execSQL(DATABASE_INSERT);
     }
 
@@ -44,17 +47,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public List<Map<String, String>> getAllBooks(){
+    public ArrayList<Book> getAllBooks(){
 
         String[] columns = new String[3];
         columns[0] = "id";
-        columns[1] = "titre";
-        columns[2] = "auteur";
+        columns[1] = "auteur";
+        columns[2] = "titre";
 
         Cursor cursor = database.query("livre", columns,
         null, null, null, null, null, null);
 
-        List<Map<String, String>> listOfBook = new ArrayList<Map<String, String>>();
+        ArrayList<Book> bookList = new ArrayList<>();
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
@@ -62,17 +65,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             String titre = cursor.getString(1);
             String auteur = cursor.getString(2);
 
-            Map<String, String> bookMap = new HashMap<>();
-            bookMap.put("img", String.valueOf(R.mipmap.ic_launcher)); // use available img
-            bookMap.put("title", titre);
-            bookMap.put("author", auteur);
-            bookMap.put("isbn", Integer.toString(id));
+            Book currentBook = new Book(auteur, titre, Integer.toString(id));
+            bookList.add(currentBook);
 
-            listOfBook.add(bookMap);
             cursor.moveToNext();
         }
         // Close the cursor
         cursor.close();
-        return listOfBook;
+        return bookList;
     }
 }
