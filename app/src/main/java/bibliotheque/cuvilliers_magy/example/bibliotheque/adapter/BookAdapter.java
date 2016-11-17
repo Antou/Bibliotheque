@@ -102,7 +102,7 @@ public class BookAdapter extends BaseAdapter implements View.OnClickListener {
             holder.author.setText( tempValues.getAuthor() );
             holder.image.setImageResource(
                     res.getIdentifier(
-                            "com.androidexample.customlistview:drawable/"+tempValues.getImage()
+                            "com.androidexample.customlistview:drawable/"+tempValues.getCouverture()
                             ,null,null));
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/

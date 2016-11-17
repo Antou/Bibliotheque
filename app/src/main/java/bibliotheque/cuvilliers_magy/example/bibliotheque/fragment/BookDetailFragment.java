@@ -36,6 +36,20 @@ public class BookDetailFragment extends Fragment {
 
         TextView title = (TextView) view.findViewById(R.id.titleFragment);
         title.setText(this.book.getTitle());
+        TextView titleView = (TextView) view.findViewById(R.id.titleFragment);
+        titleView.setText("Titre : " + this.book.getTitle());
+        TextView authorView = (TextView) view.findViewById(R.id.authorFragment);
+        authorView.setText("Auteur : " + this.book.getAuthor());
+        TextView isbnView = (TextView) view.findViewById(R.id.isbnFragment);
+        isbnView.setText("ISBN : " + this.book.getIsbn());
+        TextView serieView = (TextView) view.findViewById(R.id.serieFragment);
+        serieView.setText("Série : " + this.book.getSerie());
+        TextView genreView = (TextView) view.findViewById(R.id.genreFragment);
+        genreView.setText("Genre : " + this.book.getGenre());
+        TextView resumeView = (TextView) view.findViewById(R.id.resumeFragment);
+        resumeView.setText("Résumé : " + this.book.getResume());
+        TextView editeurView = (TextView) view.findViewById(R.id.editeurFragment);
+        editeurView.setText("Editeur : " + this.book.getEditeur());
         return view;
     }
 
