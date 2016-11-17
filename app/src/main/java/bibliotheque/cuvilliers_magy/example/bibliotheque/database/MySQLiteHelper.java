@@ -58,15 +58,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
-            Log.d("TEST", database.toString());
             int id = cursor.getInt(0);
             String titre = cursor.getString(1);
             String auteur = cursor.getString(2);
 
             Map<String, String> bookMap = new HashMap<>();
             bookMap.put("img", String.valueOf(R.mipmap.ic_launcher)); // use available img
-            bookMap.put("author", auteur);
             bookMap.put("title", titre);
+            bookMap.put("author", auteur);
             bookMap.put("isbn", Integer.toString(id));
 
             listOfBook.add(bookMap);

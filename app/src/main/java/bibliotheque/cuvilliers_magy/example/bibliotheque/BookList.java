@@ -30,8 +30,8 @@ public class BookList extends AppCompatActivity {
         listOfBook = dbhelper.getAllBooks();
 
         final SimpleAdapter listAdapter = new SimpleAdapter(this.getBaseContext(), listOfBook, R.layout.book_detail,
-                new String[] {"img", "author", "title", "isbn"},
-                new int[] {R.id.img, R.id.author, R.id.title, R.id.isbn});
+                new String[] {"img", "title", "author", "isbn"},
+                new int[] {R.id.img, R.id.title, R.id.author, R.id.isbn});
 
         bookList.setAdapter(listAdapter);
 
@@ -42,7 +42,7 @@ public class BookList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Object item = listAdapter.getItem(position);
-                String title = ((Map<String, String>) item).get("author");
+                String title = ((Map<String, String>) item).get("title");
                 Toast.makeText(getApplicationContext(),
                         "Title : " + title, Toast.LENGTH_LONG)
                         .show();
