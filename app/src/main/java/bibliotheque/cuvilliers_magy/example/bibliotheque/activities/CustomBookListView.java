@@ -1,17 +1,17 @@
-package bibliotheque.cuvilliers_magy.example.bibliotheque.adapter;
+package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.adapter.BookAdapter;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.fragment.BookDetailFragment;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
@@ -54,12 +54,21 @@ public class CustomBookListView extends Activity {
     }
 
     public void detailBookFragment(Book book){
-        FragmentManager fm = this.getFragmentManager();
-        FragmentTransaction fTransaction = fm.beginTransaction();
 
-        BookDetailFragment bookFragment = new BookDetailFragment();
-        bookFragment.setBook(book);
-        fTransaction.replace(R.id.bookFragment, bookFragment);
-        fTransaction.commit();
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT){
+            return;
+        }
+
+        else {
+            FragmentManager fm = this.getFragmentManager();
+            FragmentTransaction fTransaction = fm.beginTransaction();
+
+            BookDetailFragment bookFragment = new BookDetailFragment();
+            bookFragment.setBook(book);
+            fTransaction.replace(R.id.bookFragment, bookFragment);
+            fTransaction.commit();
+        }
     }
 }
