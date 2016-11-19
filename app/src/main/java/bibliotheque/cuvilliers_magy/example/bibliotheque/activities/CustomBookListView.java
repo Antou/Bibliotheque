@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.widget.ListView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -74,7 +77,7 @@ public class CustomBookListView extends Activity {
 
     public void showBookDetailPortrait(Book book){
         Intent intent = new Intent(this, BookDetail.class);
-        intent.putExtra("Title", book.getTitle());
+        intent.putExtra("book", new Gson().toJson(book));
         startActivity(intent);
     }
 

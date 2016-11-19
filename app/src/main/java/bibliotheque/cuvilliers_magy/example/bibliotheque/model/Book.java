@@ -1,5 +1,8 @@
 package bibliotheque.cuvilliers_magy.example.bibliotheque.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,4 +108,7 @@ public class Book {
     public void setAnnotations(ArrayList<String> annotations) {
         this.annotations = annotations;
     }
+
+
+
 }
