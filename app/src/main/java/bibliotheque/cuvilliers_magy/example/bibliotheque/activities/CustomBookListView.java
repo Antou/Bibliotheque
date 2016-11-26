@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
+import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -37,6 +37,9 @@ public class CustomBookListView extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_livres);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //setActionBar(myToolbar);
 
         customListView = this;
 
