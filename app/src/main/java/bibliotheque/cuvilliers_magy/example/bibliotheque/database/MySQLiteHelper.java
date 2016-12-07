@@ -28,7 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String DATABASE_CREATE = "" +
             "CREATE TABLE IF NOT EXISTS livre (id integer primary key, titre VARCHAR(30)," +
             "auteur VARCHAR(30), resume VARCHAR(300), genre VARCHAR(30), serie VARCHAR(30)," +
-            "editeur VARCHAR(30), image VARCHAR(100));\n";
+            "editeur VARCHAR(30), image integer);\n";
 
 
     public MySQLiteHelper(Context context){
@@ -49,7 +49,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("genre", "Comédie");
         values.put("serie", "titeuf le retour");
         values.put("editeur", "glenat");
-        values.put("image", this.resPath + "titeuf.jpg");
+        values.put("image", R.drawable.titeuf);
         database.insert("livre", null, values);
     }
 
@@ -64,9 +64,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     public static void deleteBookByID(String bookID){
-        int rows;
-        rows = database.delete("livre", "id=?", new String[]{bookID});
-        Log.v("Rows : ", Integer.toString(rows));
+        database.delete("livre", "id=?", new String[]{bookID});
     }
 
     public ArrayList<Book> getAllBooks(){
@@ -95,7 +93,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             String genre = cursor.getString(4);
             String serie = cursor.getString(5);
             String editeur = cursor.getString(6);
-            String couverture = cursor.getString(7);
+            int couverture = cursor.getInt(7);
 
             Book currentBook = new Book(auteur, titre, Integer.toString(id),serie,genre,editeur,"",couverture
                     ,new ArrayList<String>(),resume,new ArrayList<String>());

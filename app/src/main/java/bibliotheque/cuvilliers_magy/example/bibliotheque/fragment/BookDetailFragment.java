@@ -62,7 +62,7 @@ public class BookDetailFragment extends Fragment {
         editeurView.setText("Editeur : " + this.book.getEditeur());
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageFragment);
-        imageView.setImageResource(R.drawable.titeuf);
+        imageView.setImageResource(this.book.getCouverture());
 
         return view;
     }
