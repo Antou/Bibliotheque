@@ -21,7 +21,6 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-    protected String resPath = "";
     public static final String DATABASE_NAME = "livres.db";
     public static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase database;
@@ -33,11 +32,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        context.deleteDatabase(DATABASE_NAME);
+        //context.deleteDatabase(DATABASE_NAME);
         database = super.getWritableDatabase();
         database.execSQL(DATABASE_CREATE);
-        this.resPath = "android.resource://" + context.getPackageName() + "/images/";
-        this.insertTestValues();
+        //this.insertTestValues();
     }
 
     public void insertTestValues(){
@@ -50,7 +48,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("serie", "titeuf le retour");
         values.put("editeur", "glenat");
         values.put("image", R.drawable.titeuf);
-        database.insert("livre", null, values);
+
+        ContentValues secondValues = new ContentValues();
+        secondValues.put("id", 1);
+        secondValues.put("titre", "Booba le petit ourson");
+        secondValues.put("auteur", "92i");
+        secondValues.put("resume", "Qu'est-ce que je vais faire de tout cet oseille ?");
+        secondValues.put("genre", "Rap francais");
+        secondValues.put("serie", "Le duc de boulogne");
+        secondValues.put("editeur", "Skyrock");
+        secondValues.put("image", R.drawable.booba);
+
+        database.insertWithOnConflict("livre", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        database.insertWithOnConflict("livre", null, secondValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     @Override
