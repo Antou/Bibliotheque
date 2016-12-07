@@ -6,14 +6,10 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -22,7 +18,7 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper
 import bibliotheque.cuvilliers_magy.example.bibliotheque.fragment.BookDetailFragment;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
-public class BookDetail extends AppCompatActivity {
+public class BookDetailActivity extends AppCompatActivity {
 
     private Button deleteButton;
     private String currentBookID;
@@ -50,21 +46,9 @@ public class BookDetail extends AppCompatActivity {
                 // First delete book in database
                 MySQLiteHelper.deleteBookByID(currentBookID);
                 // Then go back to book list
-                startActivity(new Intent(BookDetail.this, CustomBookListView.class));
+                startActivity(new Intent(BookDetailActivity.this, BookListViewActivity.class));
             }
         });
     }
-
-    private View.OnClickListener deleteButtonListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Log.v("DELETE", "Book deleted : " + currentBookID);
-            // First delete book in database
-            MySQLiteHelper.deleteBookByID(currentBookID);
-            // Then delete the fragment
-            Fragment fragment = fm.findFragmentByTag("bookDetailFragment");
-            fm.beginTransaction().remove(fragment).commit();
-        }
-
-    };
 
 }

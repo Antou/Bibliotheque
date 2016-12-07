@@ -12,6 +12,10 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_alignParentTop="true">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/imageFragment"/>
         <TextView
             android:id="@+id/titleFragment"
             android:layout_width="wrap_content"

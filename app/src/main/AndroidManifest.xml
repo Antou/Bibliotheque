@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".activities.CustomBookListView"
+            android:name=".activities.BookListViewActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.BookDetail"
+            android:name=".activities.BookDetailActivity"
             android:label="@string/title_activity_book_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

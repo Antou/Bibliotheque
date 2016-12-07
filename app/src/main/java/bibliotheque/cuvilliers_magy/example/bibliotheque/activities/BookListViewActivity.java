@@ -1,6 +1,5 @@
 package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -9,11 +8,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -30,11 +24,11 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
  * Created by Alessandro on 17/10/2016.
  */
 
-public class CustomBookListView extends AppCompatActivity {
+public class BookListViewActivity extends AppCompatActivity {
 
     ListView list;
     BookAdapter adapter;
-    public CustomBookListView customListView = null;
+    public BookListViewActivity customListView = null;
     public ArrayList<Book> bookList = new ArrayList<>();
     private Book currentBookSelected = null;
 
@@ -88,7 +82,7 @@ public class CustomBookListView extends AppCompatActivity {
     }
 
     public void showBookDetailPortrait(Book book){
-        Intent intent = new Intent(this, BookDetail.class);
+        Intent intent = new Intent(this, BookDetailActivity.class);
         intent.putExtra("book", new Gson().toJson(book));
         startActivity(intent);
     }
