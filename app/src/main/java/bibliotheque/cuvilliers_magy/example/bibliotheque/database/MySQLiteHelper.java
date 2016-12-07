@@ -33,10 +33,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        context.deleteDatabase(DATABASE_NAME);
-        database = super.getReadableDatabase();
+        //context.deleteDatabase(DATABASE_NAME);
+        database = super.getWritableDatabase();
         database.execSQL(DATABASE_CREATE);
-        database.execSQL(DATABASE_INSERT);
+        //database.execSQL(DATABASE_INSERT);
     }
 
     @Override
@@ -47,6 +47,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public static void deleteBookByID(String bookID){
+        int rows;
+        rows = database.delete("livre", "id=?", new String[]{bookID});
+        Log.v("Rows : ", Integer.toString(rows));
     }
 
     public ArrayList<Book> getAllBooks(){

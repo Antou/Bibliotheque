@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/bookFragment"
+    android:tag="bookDetailFragment"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <LinearLayout
-
-        android:tag="bookDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -42,28 +41,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
+        <include
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:text="Supprimer"
-                android:id="@+id/DeleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true">
-            </Button>
-
-            <Button
-                android:text="Modifier"
-                android:id="@+id/ModifyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
-            </Button>
-
-        </RelativeLayout>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            layout="@layout/book_buttons">
+        </include>
 
     </LinearLayout>
 

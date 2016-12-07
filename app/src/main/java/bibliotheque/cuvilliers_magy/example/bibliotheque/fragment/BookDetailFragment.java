@@ -25,6 +25,9 @@ public class BookDetailFragment extends Fragment {
     public void setBook(Book book){
         this.book = book;
     }
+    public String getBookID(){
+        return this.book.getIsbn();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

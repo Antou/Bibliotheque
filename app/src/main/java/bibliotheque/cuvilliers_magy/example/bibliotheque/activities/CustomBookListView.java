@@ -10,6 +10,10 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -32,6 +36,7 @@ public class CustomBookListView extends AppCompatActivity {
     BookAdapter adapter;
     public CustomBookListView customListView = null;
     public ArrayList<Book> bookList = new ArrayList<>();
+    private Book currentBookSelected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +44,16 @@ public class CustomBookListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_livres);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        /*Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(0xFF160203);
-        setSupportActionBar(myToolbar);
+        setSupportActionBar(myToolbar);*/
 
         customListView = this;
 
         MySQLiteHelper dbhelper = new MySQLiteHelper(this);
         bookList = dbhelper.getAllBooks();
 
-        Resources res =getResources();
+        Resources res = getResources();
         list = ( ListView )findViewById( R.id.booklist );  // List defined in XML ( See Below )
 
         /**************** Create Custom Adapter *********/
@@ -61,6 +66,7 @@ public class CustomBookListView extends AppCompatActivity {
     {
         // Print details for each book when clicked on
         Book book = bookList.get(mPosition);
+        this.currentBookSelected = book;
         this.detailBookFragment(book);
     }
 
