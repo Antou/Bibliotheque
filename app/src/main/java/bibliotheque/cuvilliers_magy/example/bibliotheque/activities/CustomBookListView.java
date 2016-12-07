@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 
@@ -25,7 +26,7 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
  * Created by Alessandro on 17/10/2016.
  */
 
-public class CustomBookListView extends Activity {
+public class CustomBookListView extends AppCompatActivity {
 
     ListView list;
     BookAdapter adapter;
@@ -39,7 +40,8 @@ public class CustomBookListView extends Activity {
         setContentView(R.layout.activity_liste_livres);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //setActionBar(myToolbar);
+        myToolbar.setBackgroundColor(0xFF160203);
+        setSupportActionBar(myToolbar);
 
         customListView = this;
 
@@ -57,6 +59,7 @@ public class CustomBookListView extends Activity {
     /*****************  This function used by adapter ****************/
     public void onItemClick(int mPosition)
     {
+        // Print details for each book when clicked on
         Book book = bookList.get(mPosition);
         this.detailBookFragment(book);
     }

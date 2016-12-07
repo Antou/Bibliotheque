@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bookFragment"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/bookFragment"
+
         android:tag="bookDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,6 +42,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:text="Supprimer"
+                android:id="@+id/DeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true">
+            </Button>
+
+            <Button
+                android:text="Modifier"
+                android:id="@+id/ModifyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+            </Button>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
