@@ -35,7 +35,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //context.deleteDatabase(DATABASE_NAME);
         database = super.getWritableDatabase();
         database.execSQL(DATABASE_CREATE);
-        //this.insertTestValues();
+        this.insertTestValues();
     }
 
     public void insertTestValues(){
