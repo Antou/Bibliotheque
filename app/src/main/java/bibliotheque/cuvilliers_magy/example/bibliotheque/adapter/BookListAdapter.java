@@ -18,7 +18,7 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.activities.BookListView
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
-public class BookAdapter extends BaseAdapter implements View.OnClickListener {
+public class BookListAdapter extends BaseAdapter implements View.OnClickListener {
 
     /*********** Declare Used Variables *********/
     private Activity activity;
@@ -28,7 +28,7 @@ public class BookAdapter extends BaseAdapter implements View.OnClickListener {
     Book tempValues = null;
 
     /*************  CustomAdapter Constructor *****************/
-    public BookAdapter(Activity a, ArrayList d,Resources resLocal) {
+    public BookListAdapter(Activity a, ArrayList d, Resources resLocal) {
 
         /********** Take passed values **********/
         activity = a;
