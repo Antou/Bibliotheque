@@ -3,6 +3,11 @@ package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+<<<<<<< HEAD
+=======
+import android.app.SearchManager;
+import android.content.Context;
+>>>>>>> 8cc1d25c6f233e8d351ed08687db29ec34772112
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -13,10 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
+<<<<<<< HEAD
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
+=======
+import android.widget.Button;
+>>>>>>> 8cc1d25c6f233e8d351ed08687db29ec34772112
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -49,6 +58,9 @@ public class BookListViewActivity extends AppCompatActivity {
     public int[] images;
     private FloatingActionButton addButton;
     private int viewMode = 0; // 0 : LIST -- 1 : GALLERY
+    private Book currentBookSelected = null;
+    FloatingActionButton b1;
+    //Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +72,8 @@ public class BookListViewActivity extends AppCompatActivity {
             setContentView(R.layout.activity_liste_livres_mosaique);
 
         customListView = this;
+        b1 = (FloatingActionButton) findViewById(R.id.addBookButton);
+        b1.setOnClickListener(myhandler);
 
         MySQLiteHelper dbhelper = new MySQLiteHelper(this);
         bookList = dbhelper.getAllBooks();
@@ -94,6 +108,8 @@ public class BookListViewActivity extends AppCompatActivity {
         /**************** Create Custom Adapter *********/
         this.buildSearchView();
     }
+
+
 
     /*****************  This function used by adapter ****************/
     public void onItemClick(int mPosition)
@@ -151,6 +167,15 @@ public class BookListViewActivity extends AppCompatActivity {
             }
         }
     }
+
+    View.OnClickListener myhandler = new View.OnClickListener() {
+        public void onClick(View v) {
+            Log.v("test","test");
+            Intent intent = new Intent(ctx, AddBook.class);
+            //intent.putExtra("book", new Gson().toJson(book));
+            startActivity(intent);
+        }
+    };
 
     public void buildSearchView() {
         android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) findViewById(R.id.searchView);
