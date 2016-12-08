@@ -3,6 +3,7 @@ package bibliotheque.cuvilliers_magy.example.bibliotheque.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
-import bibliotheque.cuvilliers_magy.example.bibliotheque.activities.CustomBookListView;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.activities.BookListViewActivity;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
@@ -79,8 +80,7 @@ public class BookAdapter extends BaseAdapter implements View.OnClickListener {
 
             holder = new ViewHolder();
             holder.title = (TextView) vi.findViewById(R.id.title);
-            holder.author = (TextView)vi.findViewById(R.id.author);
-            holder.image = (ImageView)vi.findViewById(R.id.image);
+            holder.image = (ImageView)vi.findViewById(R.id.bookImage);
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
@@ -99,11 +99,7 @@ public class BookAdapter extends BaseAdapter implements View.OnClickListener {
             /************  Set Model values in Holder elements ***********/
 
             holder.title.setText( tempValues.getTitle() );
-            holder.author.setText( tempValues.getAuthor() );
-            holder.image.setImageResource(
-                    res.getIdentifier(
-                            "com.androidexample.customlistview:drawable/"+tempValues.getCouverture()
-                            ,null,null));
+            holder.image.setImageResource(tempValues.getCouverture());
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/
 
@@ -127,7 +123,7 @@ public class BookAdapter extends BaseAdapter implements View.OnClickListener {
 
         @Override
         public void onClick(View arg0) {
-            CustomBookListView sct = (CustomBookListView) activity;
+            BookListViewActivity sct = (BookListViewActivity) activity;
             sct.onItemClick(mPosition);
         }
     }

@@ -1,5 +1,8 @@
 package bibliotheque.cuvilliers_magy.example.bibliotheque.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,12 +21,12 @@ public class Book {
     protected String genre;
     protected String editeur;
     protected String annee;
-    protected String couverture = "";
+    protected int couverture;
     protected ArrayList<String> illustrations;
     protected String resume;
     protected ArrayList<String> annotations;
 
-    public Book(String author, String title, String isbn, String serie, String genre, String editeur, String annee, String couverture, ArrayList<String> illustrations,
+    public Book(String author, String title, String isbn, String serie, String genre, String editeur, String annee, int couverture, ArrayList<String> illustrations,
         String resume, ArrayList<String> annotations ) {
         super();
         this.title = title;
@@ -81,10 +84,10 @@ public class Book {
     public void setAnnee(String annee) {
         this.annee = annee;
     }
-    public String getCouverture() {
+    public int getCouverture() {
         return this.couverture ;
     }
-    public void setCouverture(String couverture) {
+    public void setCouverture(int couverture) {
         this.couverture = couverture;
     }
     public ArrayList<String> getIllustrations() {
@@ -105,4 +108,7 @@ public class Book {
     public void setAnnotations(ArrayList<String> annotations) {
         this.annotations = annotations;
     }
+
+
+
 }
