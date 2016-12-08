@@ -38,6 +38,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         this.insertTestValues();
     }
 
+    public static void insertValues(int id,String titre, String auteur, String genre, String serie, String editeur){
+        ContentValues values = new ContentValues();
+        values.put("id", id);
+        values.put("titre", titre);
+        values.put("auteur", auteur);
+        values.put("resume", "La calotte de tes morts");
+        values.put("genre", genre);
+        values.put("serie", serie);
+        values.put("editeur", editeur);
+        values.put("image", R.drawable.booba);
+
+        database.insertWithOnConflict("livre", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+    }
+
     public void insertTestValues(){
         ContentValues values = new ContentValues();
         values.put("id", 2);

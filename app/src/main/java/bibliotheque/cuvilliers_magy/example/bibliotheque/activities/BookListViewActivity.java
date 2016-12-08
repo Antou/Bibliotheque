@@ -4,13 +4,17 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -34,6 +38,8 @@ public class BookListViewActivity extends AppCompatActivity {
     public BookListViewActivity customListView = null;
     public ArrayList<Book> bookList = new ArrayList<>();
     private Book currentBookSelected = null;
+    FloatingActionButton b1;
+    Context ctx = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,8 @@ public class BookListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_livres);
         customListView = this;
+        b1 = (FloatingActionButton) findViewById(R.id.addBookButton);
+        b1.setOnClickListener(myhandler);
 
         MySQLiteHelper dbhelper = new MySQLiteHelper(this);
         bookList = dbhelper.getAllBooks();
@@ -53,6 +61,8 @@ public class BookListViewActivity extends AppCompatActivity {
         list.setAdapter(adapter);
         this.buildSearchView();
     }
+
+
 
     /*****************  This function used by adapter ****************/
     public void onItemClick(int mPosition)
@@ -103,6 +113,15 @@ public class BookListViewActivity extends AppCompatActivity {
             }
         }
     }
+
+    View.OnClickListener myhandler = new View.OnClickListener() {
+        public void onClick(View v) {
+            Log.v("test","test");
+            Intent intent = new Intent(ctx, AddBook.class);
+            //intent.putExtra("book", new Gson().toJson(book));
+            startActivity(intent);
+        }
+    };
 
     public void buildSearchView() {
         android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) findViewById(R.id.searchView);
