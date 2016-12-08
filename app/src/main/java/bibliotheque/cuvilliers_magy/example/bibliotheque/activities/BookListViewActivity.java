@@ -3,11 +3,14 @@ package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -38,10 +41,6 @@ public class BookListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_livres);
 
-        /*Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setBackgroundColor(0xFF160203);
-        setSupportActionBar(myToolbar);*/
-
         customListView = this;
 
         MySQLiteHelper dbhelper = new MySQLiteHelper(this);
@@ -52,7 +51,8 @@ public class BookListViewActivity extends AppCompatActivity {
 
         /**************** Create Custom Adapter *********/
         adapter = new BookAdapter(customListView, bookList, res);
-        list.setAdapter( adapter );
+        list.setAdapter(adapter);
+        this.buildSearchView();
     }
 
     /*****************  This function used by adapter ****************/
@@ -104,4 +104,24 @@ public class BookListViewActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void buildSearchView() {
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                bookList = MySQLiteHelper.searchBooksByTitle(query);
+                Resources res = getResources();
+                adapter = new BookAdapter(customListView, bookList, res);
+                list.setAdapter(adapter);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+    }
+
 }

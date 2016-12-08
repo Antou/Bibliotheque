@@ -77,6 +77,45 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         database.delete("livre", "id=?", new String[]{bookID});
     }
 
+    public static ArrayList<Book> searchBooksByTitle(String query){
+        ArrayList<Book> bookList = new ArrayList<>();
+        String[] columns = new String[8];
+        columns[0] = "id";
+        columns[1] = "titre";
+        columns[2] = "auteur";
+        columns[3] = "resume";
+        columns[4] = "genre";
+        columns[5] = "serie";
+        columns[6] = "editeur";
+        columns[7] = "image";
+
+        Cursor cursor = database.query(true, "livre", columns, "titre" + " LIKE ?",
+                new String[] {"%"+ query + "%" }, null, null, null,
+                null);
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            Log.v("CURSOR MOVING", "CURSOR MOVING");
+            int id = cursor.getInt(0);
+            String titre = cursor.getString(1);
+            String auteur = cursor.getString(2);
+            String resume = cursor.getString(3);
+            String genre = cursor.getString(4);
+            String serie = cursor.getString(5);
+            String editeur = cursor.getString(6);
+            int couverture = cursor.getInt(7);
+
+            Book currentBook = new Book(auteur, titre, Integer.toString(id),serie,genre,editeur,"",couverture
+                    ,new ArrayList<String>(),resume,new ArrayList<String>());
+            bookList.add(currentBook);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return bookList;
+    }
+
     public ArrayList<Book> getAllBooks(){
 
         String[] columns = new String[8];
@@ -111,8 +150,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
             cursor.moveToNext();
         }
-        // Close the cursor
         cursor.close();
+
         return bookList;
     }
 }
