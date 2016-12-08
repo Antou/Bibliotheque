@@ -34,13 +34,12 @@ public class CustomBookListView extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_livres);
-
         customListView = this;
 
         MySQLiteHelper dbhelper = new MySQLiteHelper(this);
         bookList = dbhelper.getAllBooks();
 
-        Resources res =getResources();
+        Resources res = getResources();
         list = ( ListView )findViewById( R.id.booklist );  // List defined in XML ( See Below )
 
         /**************** Create Custom Adapter *********/

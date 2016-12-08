@@ -30,12 +30,10 @@ public class BookDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // On gonfle le xml book detail
         View view = inflater.inflate(R.layout.book_detail, container, false);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            return view;
-        }
-
+        // On remplit toute les informations du livre
         TextView title = (TextView) view.findViewById(R.id.titleFragment);
         title.setText(this.book.getTitle());
         TextView titleView = (TextView) view.findViewById(R.id.titleFragment);

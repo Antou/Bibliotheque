@@ -33,10 +33,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        context.deleteDatabase(DATABASE_NAME);
+        //context.deleteDatabase(DATABASE_NAME);
         database = super.getReadableDatabase();
         database.execSQL(DATABASE_CREATE);
-        database.execSQL(DATABASE_INSERT);
+        //database.execSQL(DATABASE_INSERT);
     }
 
     @Override
