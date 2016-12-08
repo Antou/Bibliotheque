@@ -59,9 +59,7 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
 
     /********* Create a holder Class to contain inflated xml file elements *********/
     public static class ViewHolder{
-        public TextView author;
         public TextView title;
-        public TextView isbn;
         public ImageView image;
     }
 
@@ -74,13 +72,13 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
         if(convertView==null){
 
             /****** Inflate tabitem.xml file for each row ( Defined below ) *******/
-            vi = inflater.inflate(R.layout.item_list, null);
+                vi = inflater.inflate(R.layout.item_list, null);
 
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
-            holder.title = (TextView) vi.findViewById(R.id.title);
-            holder.image = (ImageView)vi.findViewById(R.id.bookImage);
+                holder.title = (TextView) vi.findViewById(R.id.title);
+                holder.image = (ImageView)vi.findViewById(R.id.bookImage);
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
@@ -94,11 +92,10 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
         else {
             /***** Get each Model object from Arraylist ********/
             tempValues = null;
-            tempValues = ( Book ) data.get( position );
+            tempValues = (Book) data.get(position);
 
             /************  Set Model values in Holder elements ***********/
-
-            holder.title.setText( tempValues.getTitle() );
+            holder.title.setText(tempValues.getTitle());
             holder.image.setImageResource(tempValues.getCouverture());
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/

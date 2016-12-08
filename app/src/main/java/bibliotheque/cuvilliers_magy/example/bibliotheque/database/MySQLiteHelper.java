@@ -25,9 +25,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase database;
     public static final String DATABASE_CREATE = "" +
-            "CREATE TABLE IF NOT EXISTS livre (id integer primary key, titre VARCHAR(30)," +
+            "CREATE TABLE IF NOT EXISTS livre (id integer primary key autoincrement, titre VARCHAR(30)," +
             "auteur VARCHAR(30), resume VARCHAR(300), genre VARCHAR(30), serie VARCHAR(30)," +
-            "editeur VARCHAR(30), image integer);\n";
+            "editeur VARCHAR(30), image integer, isbn VARCHAR(15));\n";
 
 
     public MySQLiteHelper(Context context){
@@ -35,12 +35,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //context.deleteDatabase(DATABASE_NAME);
         database = super.getWritableDatabase();
         database.execSQL(DATABASE_CREATE);
-        this.insertTestValues();
+        //this.insertTestValues();
     }
 
     public void insertTestValues(){
         ContentValues values = new ContentValues();
-        values.put("id", 2);
+        //values.put("id", 2);
         values.put("titre", "Titeuf : po juste");
         values.put("auteur", "zep");
         values.put("resume", "Titeuf de retour pour de nouvelles bêtises");
@@ -48,9 +48,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put("serie", "titeuf le retour");
         values.put("editeur", "glenat");
         values.put("image", R.drawable.titeuf);
+        values.put("isbn", "6666655555");
 
         ContentValues secondValues = new ContentValues();
-        secondValues.put("id", 1);
+        //secondValues.put("id", 1);
         secondValues.put("titre", "Booba le petit ourson");
         secondValues.put("auteur", "92i");
         secondValues.put("resume", "Qu'est-ce que je vais faire de tout cet oseille ?");
@@ -58,6 +59,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         secondValues.put("serie", "Le duc de boulogne");
         secondValues.put("editeur", "Skyrock");
         secondValues.put("image", R.drawable.booba);
+        secondValues.put("isbn", "5555566666");
 
         database.insertWithOnConflict("livre", null, values, SQLiteDatabase.CONFLICT_REPLACE);
         database.insertWithOnConflict("livre", null, secondValues, SQLiteDatabase.CONFLICT_REPLACE);
@@ -88,6 +90,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         columns[5] = "serie";
         columns[6] = "editeur";
         columns[7] = "image";
+        columns[8] = "isbn";
 
         Cursor cursor = database.query(true, "livre", columns, "titre" + " LIKE ?",
                 new String[] {"%"+ query + "%" }, null, null, null,
@@ -104,8 +107,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             String serie = cursor.getString(5);
             String editeur = cursor.getString(6);
             int couverture = cursor.getInt(7);
+            String isbn = cursor.getString(8);
 
-            Book currentBook = new Book(auteur, titre, Integer.toString(id),serie,genre,editeur,"",couverture
+            Book currentBook = new Book(auteur, titre, isbn, serie,genre,editeur,"",couverture
                     ,new ArrayList<String>(),resume,new ArrayList<String>());
             bookList.add(currentBook);
 
