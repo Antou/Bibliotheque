@@ -43,40 +43,35 @@ public class BookListViewActivity extends AppCompatActivity {
     private FloatingActionButton addButton;
     private int viewMode = 0; // 0 : LIST -- 1 : GALLERY
     private Book currentBookSelected = null;
+    private boolean addMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        if (this.viewMode == 0)
-            setContentView(R.layout.activity_liste_livres);
-        else
-            setContentView(R.layout.activity_liste_livres_mosaique);
-
+        setContentView(R.layout.activity_liste_livres);
+        bookList.clear();
         customListView = this;
 
-        MySQLiteHelper dbhelper = new MySQLiteHelper(this);
-        bookList = dbhelper.getAllBooks();
+        Intent intent = getIntent();
+        this.addMode = intent.getBooleanExtra("addMode", false);
+
+        if (!this.addMode){
+            MySQLiteHelper dbhelper = new MySQLiteHelper(this);
+            bookList = dbhelper.getAllBooks();
+        }
+        else {
+            String bookListJSON = intent.getStringExtra("books");
+            ArrayList<String> booksJSON = new Gson().fromJson(bookListJSON, ArrayList.class);
+            for (int i = 0; i < booksJSON.size(); i++){
+                bookList.add(new Gson().fromJson(booksJSON.get(i), Book.class));
+            }
+        }
 
         Resources res = getResources();
         list = (ListView)findViewById(R.id.booklist);  // List defined in XML ( See Below )
-
-        if (this.viewMode == 0){
-            adapter = new BookListAdapter(customListView, bookList, res);
-            list.setAdapter(adapter);
-        }
-
-        else {
-            int nbImages = bookList.size();
-            this.images = new int[nbImages];
-            for (int i = 0; i < bookList.size(); i++){
-                //images[i] = bookList.get(i).getCouverture();
-            }
-            Gallery gallery = (Gallery) findViewById(R.id.gallery);
-            gallery.setSpacing(1);
-            final BookGalleryAdapter galleryImageAdapter= new BookGalleryAdapter(this, images);
-            gallery.setAdapter(galleryImageAdapter);
-        }
+        adapter = new BookListAdapter(customListView, bookList, res);
+        list.setAdapter(adapter);
 
         // Set up buttons
         this.buildButtonsAction();
@@ -86,10 +81,12 @@ public class BookListViewActivity extends AppCompatActivity {
 
     protected void buildButtonsAction(){
         this.addButton = (FloatingActionButton) findViewById(R.id.addBookButton);
+        if (this.addMode){
+            this.addButton.hide();
+        }
         this.addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AddBookActivity.class);
-                //intent.putExtra("book", new Gson().toJson(book));
                 startActivity(intent);
             }
         });
@@ -127,8 +124,6 @@ public class BookListViewActivity extends AppCompatActivity {
         intent.putExtra("book", new Gson().toJson(book));
         startActivity(intent);
     }
-
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

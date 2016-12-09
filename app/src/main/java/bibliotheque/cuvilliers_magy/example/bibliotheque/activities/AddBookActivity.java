@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper;
+import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.scan.BarcodeCaptureActivity;
 
 public class AddBookActivity extends AppCompatActivity {
@@ -95,37 +97,46 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     public static void parseGetResponse(String response){
-        Log.v("Response", response);
         try {
+            ArrayList<String> booksFound = new ArrayList<>();
             JSONObject resultObject = new JSONObject(response);
             JSONArray bookArray = resultObject.getJSONArray("items");
-            JSONObject bookObject = bookArray.getJSONObject(0);
-            JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
-            JSONObject imagesObject = volumeObject.getJSONObject("imageLinks");
+            for (int i = 0; i < bookArray.length(); i++){
+                JSONObject bookObject = bookArray.getJSONObject(i);
+                JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
+                JSONObject imagesObject = volumeObject.getJSONObject("imageLinks");
+                String title = volumeObject.getString("title");
+                String imageLink = imagesObject.getString("thumbnail");
+                String description = volumeObject.getString("description");
+                String publisher = volumeObject.getString("publisher");
 
-            String title = volumeObject.getString("title");
-            String imageLink = imagesObject.getString("smallThumbnail");
-            String description = volumeObject.getString("description");
-            String publisher = volumeObject.getString("publisher");
+                String categorie = "";
+                ArrayList<String> authors = new ArrayList<>();
 
-            String categorie = "";
-            ArrayList<String> authors = new ArrayList<>();
+                JSONArray authorsArray = volumeObject.getJSONArray("authors");
+                JSONArray categoriesArray = volumeObject.getJSONArray("categories");
 
-            JSONArray authorsArray = volumeObject.getJSONArray("authors");
-            JSONArray categoriesArray = volumeObject.getJSONArray("categories");
+                for (int j = 0; i < authorsArray.length(); i++){
+                    authors.add(authorsArray.getString(j));
+                }
+                for (int j = 0; i < categoriesArray.length(); i++){
+                    categorie += categoriesArray.getString(j);
+                }
 
-            for (int i = 0; i < authorsArray.length(); i++){
-                authors.add(authorsArray.getString(i));
+                Book currentBook = new Book(-1, title, description, categorie, publisher, imageLink);
+                String bookJSON = new Gson().toJson(currentBook);
+                booksFound.add(bookJSON);
             }
-            for (int i = 0; i < categoriesArray.length(); i++){
-                categorie += categoriesArray.getString(i);
-            }
 
-            // Add book to database
-            MySQLiteHelper.addBook(title, description, categorie, publisher, imageLink);
+            String jsonBooks = new Gson().toJson(booksFound);
+
             // Go back to main activity
-            ctx.startActivity(new Intent(ctx, BookListViewActivity.class));
+            Intent intent = new Intent(ctx, BookListViewActivity.class);
+            intent.putExtra("books", jsonBooks);
+            intent.putExtra("addMode", true);
+            ctx.startActivity(intent);
         }
+
         catch (JSONException exception){
             // Handle exception
             Log.v("EXCEPTION", exception.getMessage());
@@ -136,7 +147,7 @@ public class AddBookActivity extends AppCompatActivity {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(ctx);
         //String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn + "isbn";
-        String url = "https://www.googleapis.com/books/v1/volumes?q="+isbn;
+        String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn;
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -163,7 +174,7 @@ public class AddBookActivity extends AppCompatActivity {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Log.d("Scan", "Barcode read: " + barcode.displayValue);
                     // Launching GET Request with barcode
-                    launchRequestToFindBook(barcode.displayValue);
+                    launchRequestToFindBook(barcode.rawValue);
                 } else {
                     // NO BARCODE CAPTURED
                     Log.d("Scan", "No barcode captured, intent data is null");
