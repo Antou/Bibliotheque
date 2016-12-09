@@ -70,7 +70,7 @@ public class BookListViewActivity extends AppCompatActivity {
             int nbImages = bookList.size();
             this.images = new int[nbImages];
             for (int i = 0; i < bookList.size(); i++){
-                images[i] = bookList.get(i).getCouverture();
+                //images[i] = bookList.get(i).getCouverture();
             }
             Gallery gallery = (Gallery) findViewById(R.id.gallery);
             gallery.setSpacing(1);

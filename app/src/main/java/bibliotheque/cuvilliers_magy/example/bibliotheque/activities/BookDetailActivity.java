@@ -20,35 +20,37 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 public class BookDetailActivity extends AppCompatActivity {
 
-    private Button deleteButton;
     private String currentBookID;
     private FragmentManager fm = this.getFragmentManager();
+    private boolean addMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         Intent intent = getIntent();
+        this.addMode = intent.getBooleanExtra("addMode", false);
         String bookJSON = intent.getStringExtra("book");
 
         FragmentTransaction fTransaction = this.fm.beginTransaction();
-
         BookDetailFragment bookFragment = new BookDetailFragment();
         bookFragment.setBook(new Gson().fromJson(bookJSON, Book.class));
         fTransaction.replace(R.id.bookFragment, bookFragment);
         fTransaction.commit();
 
         // Setting button to use onClick method on them
-        this.currentBookID = bookFragment.getBookID();
-        final FloatingActionButton button = (FloatingActionButton) findViewById(R.id.deleteButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // First delete book in database
-                MySQLiteHelper.deleteBookByID(currentBookID);
-                // Then go back to book list
-                startActivity(new Intent(BookDetailActivity.this, BookListViewActivity.class));
-            }
-        });
+        if (!this.addMode){
+            this.currentBookID = bookFragment.getBookID();
+            final FloatingActionButton deleteButton = (FloatingActionButton) findViewById(R.id.deleteButton);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // First delete book in database
+                    MySQLiteHelper.deleteBookByID(currentBookID);
+                    // Then go back to book list
+                    startActivity(new Intent(BookDetailActivity.this, BookListViewActivity.class));
+                }
+            });
+        }
     }
 
 }

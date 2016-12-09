@@ -96,7 +96,7 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
 
             /************  Set Model values in Holder elements ***********/
             holder.title.setText(tempValues.getTitle());
-            holder.image.setImageResource(tempValues.getCouverture());
+            holder.image.setImageResource(R.drawable.titeuf);
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/
 
