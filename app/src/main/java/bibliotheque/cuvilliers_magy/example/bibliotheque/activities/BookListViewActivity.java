@@ -50,7 +50,7 @@ public class BookListViewActivity extends AppCompatActivity {
     private FloatingActionButton addButton;
     private int viewMode = 0; // 0 : LIST -- 1 : GALLERY
     private Book currentBookSelected = null;
-    private boolean addMode = false;
+    private static boolean addMode = false;
     static Context ctx;
 
     @Override
@@ -131,6 +131,7 @@ public class BookListViewActivity extends AppCompatActivity {
     public void showBookDetailPortrait(Book book){
         Intent intent = new Intent(this, BookDetailActivity.class);
         intent.putExtra("book", new Gson().toJson(book));
+        intent.putExtra("addMode", addMode);
         startActivity(intent);
     }
 
@@ -167,6 +168,7 @@ public class BookListViewActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 // Parse the response JSON
+                                addMode = true;
                                 Resources res = getResources();
                                 bookList.clear();
                                 bookList = AddBookActivity.parseGetResponse(response);

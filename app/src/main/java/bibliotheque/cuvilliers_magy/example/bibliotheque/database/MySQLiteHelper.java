@@ -37,7 +37,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String DATABASE_CREATE_BOOK = "" +
             "CREATE TABLE IF NOT EXISTS book (id integer primary key autoincrement, title VARCHAR(50)," +
             "description VARCHAR(500), categorie VARCHAR(100)," +
-            "publisher VARCHAR(30), image integer);\n";
+            "publisher VARCHAR(30), image VARCHAR(200));\n";
 
     public static final String DATABASE_CREATE_BOOK_BY_AUTHOR = "" +
             "CREATE TABLE IF NOT EXISTS book_by_author (idBook integer, idAuthor integer," +
@@ -74,7 +74,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(DESCRITPION_COLUMN, book.getDescription());
         values.put(CATEGORIE_COLUMN, book.getCategorie());
         values.put(PUBLISHER_COLUMN, book.getPublisher());
-        values.put(IMAGE_COLUMN, R.drawable.titeuf);
+        values.put(IMAGE_COLUMN, book.getImage());
         database.insertWithOnConflict(BOOK_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 

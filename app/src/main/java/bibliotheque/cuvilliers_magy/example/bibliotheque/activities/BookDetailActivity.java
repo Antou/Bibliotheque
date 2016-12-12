@@ -32,7 +32,7 @@ public class BookDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         Intent intent = getIntent();
-        this.addMode = intent.getBooleanExtra("addMode", true);
+        this.addMode = intent.getBooleanExtra("addMode", false);
         String bookJSON = intent.getStringExtra("book");
         currentBook = new Gson().fromJson(bookJSON, Book.class);
 
