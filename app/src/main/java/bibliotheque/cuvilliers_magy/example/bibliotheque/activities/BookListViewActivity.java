@@ -3,6 +3,7 @@ package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -15,6 +16,12 @@ import android.view.View;
 import android.widget.Gallery;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -44,12 +51,14 @@ public class BookListViewActivity extends AppCompatActivity {
     private int viewMode = 0; // 0 : LIST -- 1 : GALLERY
     private Book currentBookSelected = null;
     private boolean addMode = false;
+    static Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_livres);
+        ctx = this;
         bookList.clear();
         customListView = this;
 
@@ -143,21 +152,41 @@ public class BookListViewActivity extends AppCompatActivity {
         }
     }
 
-    public void buildSearchView() {
+    public void buildSearchView(){
         android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
             public boolean onQueryTextSubmit(String query) {
-                bookList = MySQLiteHelper.searchBooksByTitle(query);
-                Resources res = getResources();
-                adapter = new BookListAdapter(customListView, bookList, res);
-                list.setAdapter(adapter);
+
+                final String search = query;
+                RequestQueue queue = Volley.newRequestQueue(ctx);
+                //String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn + "isbn";
+                String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // Parse the response JSON
+                                Resources res = getResources();
+                                bookList.clear();
+                                bookList = AddBookActivity.parseGetResponse(response);
+                                adapter = new BookListAdapter(customListView, bookList, res);
+                                list.setAdapter(adapter);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast message and redirect to main activity
+                    }
+                });
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return true;
+                return false;
             }
         });
     }

@@ -23,14 +23,27 @@ public class BookDetailActivity extends AppCompatActivity {
     private String currentBookID;
     private FragmentManager fm = this.getFragmentManager();
     private boolean addMode;
+    private FloatingActionButton deleteButton;
+    private FloatingActionButton confirmAddButton;
+    private static Book currentBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         Intent intent = getIntent();
-        this.addMode = intent.getBooleanExtra("addMode", false);
+        this.addMode = intent.getBooleanExtra("addMode", true);
         String bookJSON = intent.getStringExtra("book");
+        currentBook = new Gson().fromJson(bookJSON, Book.class);
+
+        this.deleteButton = (FloatingActionButton) findViewById(R.id.deleteButton);
+        this.confirmAddButton = (FloatingActionButton) findViewById(R.id.confirmAddButton);
+
+        if (this.addMode) {
+            this.deleteButton.hide();
+        } else {
+            this.confirmAddButton.hide();
+        }
 
         FragmentTransaction fTransaction = this.fm.beginTransaction();
         BookDetailFragment bookFragment = new BookDetailFragment();
@@ -38,11 +51,11 @@ public class BookDetailActivity extends AppCompatActivity {
         fTransaction.replace(R.id.bookFragment, bookFragment);
         fTransaction.commit();
 
+
         // Setting button to use onClick method on them
-        if (!this.addMode){
+        if (!this.addMode) {
             this.currentBookID = bookFragment.getBookID();
-            final FloatingActionButton deleteButton = (FloatingActionButton) findViewById(R.id.deleteButton);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
+            this.deleteButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // First delete book in database
                     MySQLiteHelper.deleteBookByID(currentBookID);
@@ -50,7 +63,17 @@ public class BookDetailActivity extends AppCompatActivity {
                     startActivity(new Intent(BookDetailActivity.this, BookListViewActivity.class));
                 }
             });
+        } else {
+            this.currentBookID = bookFragment.getBookID();
+            this.confirmAddButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // First delete book in database
+                    MySQLiteHelper.addBook(currentBook);
+                    // Then go back to book list
+                    startActivity(new Intent(BookDetailActivity.this, BookListViewActivity.class));
+                }
+            });
         }
     }
-
 }
+

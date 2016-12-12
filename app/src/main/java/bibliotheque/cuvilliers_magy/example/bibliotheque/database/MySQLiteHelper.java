@@ -67,15 +67,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public static void addBook(String title, String description, String categorie, String publisher, String image){
+    public static void addBook(Book book){
         Log.v("ADD", "BOOK");
         ContentValues values = new ContentValues();
-        values.put(TITLE_COLUMN, title);
-        values.put(DESCRITPION_COLUMN, description);
-        values.put(CATEGORIE_COLUMN, categorie);
-        values.put(PUBLISHER_COLUMN, publisher);
+        values.put(TITLE_COLUMN, book.getTitle());
+        values.put(DESCRITPION_COLUMN, book.getDescription());
+        values.put(CATEGORIE_COLUMN, book.getCategorie());
+        values.put(PUBLISHER_COLUMN, book.getPublisher());
         values.put(IMAGE_COLUMN, R.drawable.titeuf);
-        long ret = database.insertWithOnConflict(BOOK_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        database.insertWithOnConflict(BOOK_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public static void deleteBookByID(String bookID){
@@ -93,7 +93,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         columns[4] = PUBLISHER_COLUMN;
         columns[5] = IMAGE_COLUMN;
 
-        Cursor cursor = database.query(true, "livre", columns, "titre" + " LIKE ?",
+        Cursor cursor = database.query(true, BOOK_TABLE, columns, TITLE_COLUMN + " LIKE ?",
                 new String[] {"%"+ query + "%" }, null, null, null,
                 null);
 

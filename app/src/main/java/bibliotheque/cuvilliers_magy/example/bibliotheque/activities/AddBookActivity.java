@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -59,6 +60,8 @@ public class AddBookActivity extends AppCompatActivity {
     protected FloatingActionButton scanButton;
 
     static int RC_BARCODE_CAPTURE = 2;
+
+    static boolean searchMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +99,10 @@ public class AddBookActivity extends AppCompatActivity {
         return new BitmapDrawable(resources, x);
     }
 
-    public static void parseGetResponse(String response){
+
+
+    public static ArrayList<Book> parseGetResponse(String response){
+        ArrayList<Book> books = new ArrayList<>();
         try {
             ArrayList<String> booksFound = new ArrayList<>();
             JSONObject resultObject = new JSONObject(response);
@@ -124,6 +130,7 @@ public class AddBookActivity extends AppCompatActivity {
                 }
 
                 Book currentBook = new Book(-1, title, description, categorie, publisher, imageLink);
+                books.add(currentBook);
                 String bookJSON = new Gson().toJson(currentBook);
                 booksFound.add(bookJSON);
             }
@@ -131,16 +138,22 @@ public class AddBookActivity extends AppCompatActivity {
             String jsonBooks = new Gson().toJson(booksFound);
 
             // Go back to main activity
-            Intent intent = new Intent(ctx, BookListViewActivity.class);
-            intent.putExtra("books", jsonBooks);
-            intent.putExtra("addMode", true);
-            ctx.startActivity(intent);
+            if(!searchMode){
+                Intent intent = new Intent(ctx, BookListViewActivity.class);
+                intent.putExtra("books", jsonBooks);
+                intent.putExtra("addMode", true);
+                ctx.startActivity(intent);
+            }
+            else {
+                return books;
+            }
         }
 
         catch (JSONException exception){
             // Handle exception
             Log.v("EXCEPTION", exception.getMessage());
         }
+        return books;
     }
 
     public static void launchRequestToFindBook(String isbn){
@@ -174,6 +187,7 @@ public class AddBookActivity extends AppCompatActivity {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     Log.d("Scan", "Barcode read: " + barcode.displayValue);
                     // Launching GET Request with barcode
+                    searchMode = false;
                     launchRequestToFindBook(barcode.rawValue);
                 } else {
                     // NO BARCODE CAPTURED
