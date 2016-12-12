@@ -3,31 +3,25 @@ package bibliotheque.cuvilliers_magy.example.bibliotheque.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-<<<<<<< HEAD
-=======
-import android.app.SearchManager;
 import android.content.Context;
->>>>>>> 8cc1d25c6f233e8d351ed08687db29ec34772112
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
-<<<<<<< HEAD
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.Gallery;
-import android.widget.ImageView;
-=======
-import android.widget.Button;
->>>>>>> 8cc1d25c6f233e8d351ed08687db29ec34772112
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -39,9 +33,6 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper
 import bibliotheque.cuvilliers_magy.example.bibliotheque.fragment.BookDetailFragment;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.scan.BarcodeCaptureActivity;
-
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 /**
  * Created by Alessandro on 17/10/2016.
@@ -59,57 +50,57 @@ public class BookListViewActivity extends AppCompatActivity {
     private FloatingActionButton addButton;
     private int viewMode = 0; // 0 : LIST -- 1 : GALLERY
     private Book currentBookSelected = null;
-    FloatingActionButton b1;
-    //Context ctx = this;
+    private static boolean addMode = false;
+    static Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        if (this.viewMode == 0)
-            setContentView(R.layout.activity_liste_livres);
-        else
-            setContentView(R.layout.activity_liste_livres_mosaique);
-
+        setContentView(R.layout.activity_liste_livres);
+        ctx = this;
+        bookList.clear();
         customListView = this;
-        b1 = (FloatingActionButton) findViewById(R.id.addBookButton);
-        b1.setOnClickListener(myhandler);
 
-        MySQLiteHelper dbhelper = new MySQLiteHelper(this);
-        bookList = dbhelper.getAllBooks();
+        Intent intent = getIntent();
+        this.addMode = intent.getBooleanExtra("addMode", false);
+
+        if (!this.addMode){
+            MySQLiteHelper dbhelper = new MySQLiteHelper(this);
+            bookList = dbhelper.getAllBooks();
+        }
+        else {
+            String bookListJSON = intent.getStringExtra("books");
+            ArrayList<String> booksJSON = new Gson().fromJson(bookListJSON, ArrayList.class);
+            for (int i = 0; i < booksJSON.size(); i++){
+                bookList.add(new Gson().fromJson(booksJSON.get(i), Book.class));
+            }
+        }
 
         Resources res = getResources();
         list = (ListView)findViewById(R.id.booklist);  // List defined in XML ( See Below )
+        adapter = new BookListAdapter(customListView, bookList, res);
+        list.setAdapter(adapter);
 
-        if (this.viewMode == 0){
-            adapter = new BookListAdapter(customListView, bookList, res);
-            list.setAdapter(adapter);
-        }
-
-        else {
-            int nbImages = bookList.size();
-            this.images = new int[nbImages];
-            for (int i = 0; i < bookList.size(); i++){
-                images[i] = bookList.get(i).getCouverture();
-            }
-            Gallery gallery = (Gallery) findViewById(R.id.gallery);
-            gallery.setSpacing(1);
-            final BookGalleryAdapter galleryImageAdapter= new BookGalleryAdapter(this, images);
-            gallery.setAdapter(galleryImageAdapter);
-        }
-
-        this.addButton = (FloatingActionButton) findViewById(R.id.addBookButton);
-        this.addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                launchScanBar();
-            }
-        });
-
-        /**************** Create Custom Adapter *********/
+        // Set up buttons
+        this.buildButtonsAction();
+        // Set up the search
         this.buildSearchView();
     }
 
+    protected void buildButtonsAction(){
+        this.addButton = (FloatingActionButton) findViewById(R.id.addBookButton);
+        if (this.addMode){
+            this.addButton.hide();
+        }
+        this.addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AddBookActivity.class);
+                startActivity(intent);
+            }
+        });
 
+    }
 
     /*****************  This function used by adapter ****************/
     public void onItemClick(int mPosition)
@@ -140,14 +131,8 @@ public class BookListViewActivity extends AppCompatActivity {
     public void showBookDetailPortrait(Book book){
         Intent intent = new Intent(this, BookDetailActivity.class);
         intent.putExtra("book", new Gson().toJson(book));
+        intent.putExtra("addMode", addMode);
         startActivity(intent);
-    }
-
-    public void launchScanBar(){
-        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-        intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
-        intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
-        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
     @Override
@@ -168,30 +153,42 @@ public class BookListViewActivity extends AppCompatActivity {
         }
     }
 
-    View.OnClickListener myhandler = new View.OnClickListener() {
-        public void onClick(View v) {
-            Log.v("test","test");
-            Intent intent = new Intent(ctx, AddBook.class);
-            //intent.putExtra("book", new Gson().toJson(book));
-            startActivity(intent);
-        }
-    };
-
-    public void buildSearchView() {
+    public void buildSearchView(){
         android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
             public boolean onQueryTextSubmit(String query) {
-                bookList = MySQLiteHelper.searchBooksByTitle(query);
-                Resources res = getResources();
-                adapter = new BookListAdapter(customListView, bookList, res);
-                list.setAdapter(adapter);
+
+                final String search = query;
+                RequestQueue queue = Volley.newRequestQueue(ctx);
+                //String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn + "isbn";
+                String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // Parse the response JSON
+                                addMode = true;
+                                Resources res = getResources();
+                                bookList.clear();
+                                bookList = AddBookActivity.parseGetResponse(response);
+                                adapter = new BookListAdapter(customListView, bookList, res);
+                                list.setAdapter(adapter);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast message and redirect to main activity
+                    }
+                });
+                // Add the request to the RequestQueue.
+                queue.add(stringRequest);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return true;
+                return false;
             }
         });
     }

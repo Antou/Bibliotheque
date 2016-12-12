@@ -4,6 +4,7 @@
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -24,18 +25,14 @@
         <activity
             android:name=".activities.BookDetailActivity"
             android:label="@string/title_activity_book_detail"
-<<<<<<< HEAD
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".scan.BarcodeCaptureActivity">
         </activity>
-=======
-            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".activities.AddBook"
+            android:name=".activities.AddBookActivity"
             android:label="@string/title_activity_add_book"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
->>>>>>> 8cc1d25c6f233e8d351ed08687db29ec34772112
     </application>
 
 </manifest>

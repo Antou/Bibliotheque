@@ -19,4 +19,13 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="bottom|right" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/confirmAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|left"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="bottom|right" />
+
 </android.support.design.widget.CoordinatorLayout>

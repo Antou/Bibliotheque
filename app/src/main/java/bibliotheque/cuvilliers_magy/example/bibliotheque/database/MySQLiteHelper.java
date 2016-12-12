@@ -21,63 +21,40 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
+    public static final String BOOK_TABLE = "book";
+    public static final String AUTHOR_TABLE = "author";
+    public static final String BOOK_BY_AUTHOR_TABLE = "book_by_author";
+
+    public static final String TITLE_COLUMN = "title";
+    public static final String DESCRITPION_COLUMN = "description";
+    public static final String CATEGORIE_COLUMN = "categorie";
+    public static final String IMAGE_COLUMN = "image";
+    public static final String PUBLISHER_COLUMN = "publisher";
+
     public static final String DATABASE_NAME = "livres.db";
     public static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase database;
-    public static final String DATABASE_CREATE = "" +
-            "CREATE TABLE IF NOT EXISTS livre (id integer primary key autoincrement, titre VARCHAR(30)," +
-            "auteur VARCHAR(30), resume VARCHAR(300), genre VARCHAR(30), serie VARCHAR(30)," +
-            "editeur VARCHAR(30), image integer, isbn VARCHAR(15));\n";
+    public static final String DATABASE_CREATE_BOOK = "" +
+            "CREATE TABLE IF NOT EXISTS book (id integer primary key autoincrement, title VARCHAR(50)," +
+            "description VARCHAR(500), categorie VARCHAR(100)," +
+            "publisher VARCHAR(30), image VARCHAR(200));\n";
+
+    public static final String DATABASE_CREATE_BOOK_BY_AUTHOR = "" +
+            "CREATE TABLE IF NOT EXISTS book_by_author (idBook integer, idAuthor integer," +
+            " primary key(idBook, idAuthor));\n";
+
+    public static final String DATABASE_CREATE_AUTHOR = "" +
+            "CREATE TABLE IF NOT EXISTS author (id integer primary key autoincrement," +
+            " name VARCHAR(50));\n";
 
 
     public MySQLiteHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //context.deleteDatabase(DATABASE_NAME);
         database = super.getWritableDatabase();
-        database.execSQL(DATABASE_CREATE);
-        //this.insertTestValues();
-    }
-
-    public static void insertValues(int id,String titre, String auteur, String genre, String serie, String editeur){
-        ContentValues values = new ContentValues();
-        values.put("id", id);
-        values.put("titre", titre);
-        values.put("auteur", auteur);
-        values.put("resume", "La calotte de tes morts");
-        values.put("genre", genre);
-        values.put("serie", serie);
-        values.put("editeur", editeur);
-        values.put("image", R.drawable.booba);
-
-        database.insertWithOnConflict("livre", null, values, SQLiteDatabase.CONFLICT_REPLACE);
-
-    }
-
-    public void insertTestValues(){
-        ContentValues values = new ContentValues();
-        //values.put("id", 2);
-        values.put("titre", "Titeuf : po juste");
-        values.put("auteur", "zep");
-        values.put("resume", "Titeuf de retour pour de nouvelles bêtises");
-        values.put("genre", "Comédie");
-        values.put("serie", "titeuf le retour");
-        values.put("editeur", "glenat");
-        values.put("image", R.drawable.titeuf);
-        values.put("isbn", "6666655555");
-
-        ContentValues secondValues = new ContentValues();
-        //secondValues.put("id", 1);
-        secondValues.put("titre", "Booba le petit ourson");
-        secondValues.put("auteur", "92i");
-        secondValues.put("resume", "Qu'est-ce que je vais faire de tout cet oseille ?");
-        secondValues.put("genre", "Rap francais");
-        secondValues.put("serie", "Le duc de boulogne");
-        secondValues.put("editeur", "Skyrock");
-        secondValues.put("image", R.drawable.booba);
-        secondValues.put("isbn", "5555566666");
-
-        database.insertWithOnConflict("livre", null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        database.insertWithOnConflict("livre", null, secondValues, SQLiteDatabase.CONFLICT_REPLACE);
+        database.execSQL(DATABASE_CREATE_BOOK);
+        database.execSQL(DATABASE_CREATE_AUTHOR);
+        database.execSQL(DATABASE_CREATE_BOOK_BY_AUTHOR);
     }
 
     @Override
@@ -90,87 +67,82 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     }
 
+    public static void addBook(Book book){
+        Log.v("ADD", "BOOK");
+        ContentValues values = new ContentValues();
+        values.put(TITLE_COLUMN, book.getTitle());
+        values.put(DESCRITPION_COLUMN, book.getDescription());
+        values.put(CATEGORIE_COLUMN, book.getCategorie());
+        values.put(PUBLISHER_COLUMN, book.getPublisher());
+        values.put(IMAGE_COLUMN, book.getImage());
+        database.insertWithOnConflict(BOOK_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
     public static void deleteBookByID(String bookID){
-        database.delete("livre", "id=?", new String[]{bookID});
+        database.delete(BOOK_TABLE, "id=?", new String[]{bookID});
+        database.delete(BOOK_BY_AUTHOR_TABLE, "idBook=?", new String[]{bookID});
     }
 
     public static ArrayList<Book> searchBooksByTitle(String query){
         ArrayList<Book> bookList = new ArrayList<>();
-        String[] columns = new String[8];
+        String[] columns = new String[6];
         columns[0] = "id";
-        columns[1] = "titre";
-        columns[2] = "auteur";
-        columns[3] = "resume";
-        columns[4] = "genre";
-        columns[5] = "serie";
-        columns[6] = "editeur";
-        columns[7] = "image";
-        columns[8] = "isbn";
+        columns[1] = TITLE_COLUMN;
+        columns[2] = DESCRITPION_COLUMN;
+        columns[3] = CATEGORIE_COLUMN;
+        columns[4] = PUBLISHER_COLUMN;
+        columns[5] = IMAGE_COLUMN;
 
-        Cursor cursor = database.query(true, "livre", columns, "titre" + " LIKE ?",
+        Cursor cursor = database.query(true, BOOK_TABLE, columns, TITLE_COLUMN + " LIKE ?",
                 new String[] {"%"+ query + "%" }, null, null, null,
                 null);
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
-            Log.v("CURSOR MOVING", "CURSOR MOVING");
             int id = cursor.getInt(0);
-            String titre = cursor.getString(1);
-            String auteur = cursor.getString(2);
-            String resume = cursor.getString(3);
-            String genre = cursor.getString(4);
-            String serie = cursor.getString(5);
-            String editeur = cursor.getString(6);
-            int couverture = cursor.getInt(7);
-            String isbn = cursor.getString(8);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String categorie = cursor.getString(3);
+            String publisher = cursor.getString(4);
+            String image = cursor.getString(5);
 
-            Book currentBook = new Book(auteur, titre, isbn, serie,genre,editeur,"",couverture
-                    ,new ArrayList<String>(),resume,new ArrayList<String>());
+            Book currentBook = new Book(id, title, description, categorie, publisher, image);
             bookList.add(currentBook);
-
             cursor.moveToNext();
         }
         cursor.close();
-
         return bookList;
     }
 
     public ArrayList<Book> getAllBooks(){
 
-        String[] columns = new String[8];
+        String[] columns = new String[6];
         columns[0] = "id";
-        columns[1] = "titre";
-        columns[2] = "auteur";
-        columns[3] = "resume";
-        columns[4] = "genre";
-        columns[5] = "serie";
-        columns[6] = "editeur";
-        columns[7] = "image";
+        columns[1] = TITLE_COLUMN;
+        columns[2] = DESCRITPION_COLUMN;
+        columns[3] = CATEGORIE_COLUMN;
+        columns[4] = PUBLISHER_COLUMN;
+        columns[5] = IMAGE_COLUMN;
 
-        Cursor cursor = database.query("livre", columns,
+        Cursor cursor = database.query(BOOK_TABLE, columns,
         null, null, null, null, null, null);
 
         ArrayList<Book> bookList = new ArrayList<>();
 
         cursor.moveToFirst();
-        while(!cursor.isAfterLast()){
+        while(!cursor.isAfterLast()) {
             int id = cursor.getInt(0);
-            String titre = cursor.getString(1);
-            String auteur = cursor.getString(2);
-            String resume = cursor.getString(3);
-            String genre = cursor.getString(4);
-            String serie = cursor.getString(5);
-            String editeur = cursor.getString(6);
-            int couverture = cursor.getInt(7);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String categorie = cursor.getString(3);
+            String publisher = cursor.getString(4);
+            String image = cursor.getString(5);
 
-            Book currentBook = new Book(auteur, titre, Integer.toString(id),serie,genre,editeur,"",couverture
-                    ,new ArrayList<String>(),resume,new ArrayList<String>());
+            Book currentBook = new Book(id, title, description, categorie, publisher, image);
             bookList.add(currentBook);
-
             cursor.moveToNext();
         }
         cursor.close();
-
         return bookList;
     }
 }

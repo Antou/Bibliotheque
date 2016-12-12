@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -77,8 +80,10 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
-                holder.title = (TextView) vi.findViewById(R.id.title);
-                holder.image = (ImageView)vi.findViewById(R.id.bookImage);
+            holder.title = (TextView) vi.findViewById(R.id.title);
+            holder.image = (ImageView)vi.findViewById(R.id.bookImage);
+
+
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
@@ -96,7 +101,8 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
 
             /************  Set Model values in Holder elements ***********/
             holder.title.setText(tempValues.getTitle());
-            holder.image.setImageResource(tempValues.getCouverture());
+            Log.v("Image", tempValues.getImage());
+            Picasso.with(parent.getContext()).load(tempValues.getImage()).resize(50, 50).into(holder.image);
 
             /******** Set Item Click Listner for LayoutInflater for each row *******/
 

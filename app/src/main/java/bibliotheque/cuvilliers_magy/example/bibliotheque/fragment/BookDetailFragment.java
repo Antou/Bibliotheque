@@ -1,12 +1,16 @@
 package bibliotheque.cuvilliers_magy.example.bibliotheque.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
@@ -23,9 +27,10 @@ public class BookDetailFragment extends Fragment {
         this.book = book;
     }
     public String getBookID(){
-        return this.book.getIsbn();
+        return Integer.toString(this.book.getID());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,29 +41,17 @@ public class BookDetailFragment extends Fragment {
         TextView title = (TextView) view.findViewById(R.id.titleFragment);
         title.setText(this.book.getTitle());
 
-        TextView titleView = (TextView) view.findViewById(R.id.titleFragment);
-        titleView.setText("Titre : " + this.book.getTitle());
-
         TextView authorView = (TextView) view.findViewById(R.id.authorFragment);
-        authorView.setText("Auteur : " + this.book.getAuthor());
-
-        TextView isbnView = (TextView) view.findViewById(R.id.isbnFragment);
-        isbnView.setText("ISBN : " + this.book.getIsbn());
-
-        TextView serieView = (TextView) view.findViewById(R.id.serieFragment);
-        serieView.setText("Série : " + this.book.getSerie());
-
-        TextView genreView = (TextView) view.findViewById(R.id.genreFragment);
-        genreView.setText("Genre : " + this.book.getGenre());
+        //authorView.setText("Auteur : " + this.book.getAuthor());
 
         TextView resumeView = (TextView) view.findViewById(R.id.resumeFragment);
-        resumeView.setText("Résumé : " + this.book.getResume());
+        resumeView.setText("Résumé : " + this.book.getDescription());
 
         TextView editeurView = (TextView) view.findViewById(R.id.editeurFragment);
-        editeurView.setText("Editeur : " + this.book.getEditeur());
+        editeurView.setText("Editeur : " + this.book.getPublisher());
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageFragment);
-        imageView.setImageResource(this.book.getCouverture());
+        Picasso.with(getContext()).load(this.book.getImage()).resize(50, 50).into(imageView);
 
         return view;
     }

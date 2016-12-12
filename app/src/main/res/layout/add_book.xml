@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:text="Ajouter un livre"
@@ -100,4 +102,21 @@
         android:layout_alignEnd="@+id/valider"
         android:layout_marginTop="16dp"
         android:id="@+id/annuler" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/annuler"
+        android:id="@+id/barCodeValue"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/scanBookButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:backgroundTint="?attr/actionModeSplitBackground"
+        android:clickable="true" />
+
 </RelativeLayout>

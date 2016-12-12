@@ -9,107 +9,73 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
+import static android.R.attr.author;
+
 /**
  * Created by cuvilliers on 29/09/16.
  */
 
 public class Book {
 
+    protected int ID;
     protected String title;
-    protected String author;
-    protected String isbn;
-    protected String serie;
-    protected String genre;
-    protected String editeur;
-    protected String annee;
-    protected int couverture;
-    protected ArrayList<String> illustrations;
-    protected String resume;
-    protected ArrayList<String> annotations;
+    protected String categorie;
+    protected String publisher;
+    protected String description;
+    protected String image;
 
-    public Book(String author, String title, String isbn, String serie, String genre, String editeur, String annee, int couverture, ArrayList<String> illustrations,
-        String resume, ArrayList<String> annotations ) {
-        super();
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.serie = serie;
-        this.genre = genre;
-        this.editeur = editeur;
-        this.annee = annee;
-        this.couverture = couverture;
-        this.illustrations = illustrations;
-        this.resume = resume;
-        this.annotations = annotations;
+    public int getID(){
+        return this.ID;
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getAuthor() {
-        return this.author;
-    }
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-    public String getIsbn() {
-        return isbn;
-    }
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-    public String getSerie() {
-        return serie;
-    }
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
-    public String getGenre() {
-        return genre;
-    }
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-    public String getEditeur() {
-        return editeur;
-    }
-    public void setEditeur(String editeur) {
-        this.editeur = editeur;
-    }
-    public String getAnnee() {
-        return annee;
-    }
-    public void setAnnee(String annee) {
-        this.annee = annee;
-    }
-    public int getCouverture() {
-        return this.couverture ;
-    }
-    public void setCouverture(int couverture) {
-        this.couverture = couverture;
-    }
-    public ArrayList<String> getIllustrations() {
-        return illustrations;
-    }
-    public void setIllustrations(ArrayList<String> illustrations) {
-        this.illustrations = illustrations;
-    }
-    public String getResume() {
-        return resume;
-    }
-    public void setResume(String resume) {
-        this.resume = resume;
-    }
-    public ArrayList<String> getAnnotations() {
-        return annotations;
-    }
-    public void setAnnotations(ArrayList<String> annotations) {
-        this.annotations = annotations;
+
+    public String getCategorie() {
+        return categorie;
     }
 
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
+    }
 
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Book(int ID, String title, String description, String categorie, String publisher, String image) {
+        super();
+        this.ID = ID;
+        this.title = title;
+        this.description = description;
+        this.categorie = categorie;
+        this.publisher = publisher;
+        this.image = image;
+    }
 
 }
