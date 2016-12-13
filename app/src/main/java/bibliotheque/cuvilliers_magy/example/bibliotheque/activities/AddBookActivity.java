@@ -73,77 +73,78 @@ public class AddBookActivity extends AppCompatActivity {
         annuler = (Button) findViewById(R.id.annuler);
         annuler.setOnClickListener(myhandler2);
 
-        titre =  (EditText) findViewById(R.id.titre);
-        auteur =  (EditText) findViewById(R.id.auteur);
-        ISBN =  (EditText) findViewById(R.id.ISBN);
-        serie =  (EditText) findViewById(R.id.serie);
-        genre =  (EditText) findViewById(R.id.genre);
-        editeur =  (EditText) findViewById(R.id.editeur);
-        annee =  (EditText) findViewById(R.id.annee);
+        titre = (EditText) findViewById(R.id.titre);
+        auteur = (EditText) findViewById(R.id.auteur);
+        ISBN = (EditText) findViewById(R.id.ISBN);
+        serie = (EditText) findViewById(R.id.serie);
+        genre = (EditText) findViewById(R.id.genre);
+        editeur = (EditText) findViewById(R.id.editeur);
+        annee = (EditText) findViewById(R.id.annee);
 
         resources = getResources();
         // Set up buttons
         this.buildButtonsAction();
     }
 
-    public static Drawable getImageFromURL(String url) throws IOException {
-        Bitmap x;
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.connect();
-        InputStream input = connection.getInputStream();
-
-        x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(resources, x);
-    }
-
-    public static void parseGetResponse(String response){
-        try {
-            ArrayList<String> booksFound = new ArrayList<>();
-            JSONObject resultObject = new JSONObject(response);
-            JSONArray bookArray = resultObject.getJSONArray("items");
-            for (int i = 0; i < bookArray.length(); i++){
-                JSONObject bookObject = bookArray.getJSONObject(i);
-                JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
+    public static void parseGetResponse(String response) throws JSONException {
+        ArrayList<String> booksFound = new ArrayList<>();
+        JSONObject resultObject = new JSONObject(response);
+        JSONArray bookArray = resultObject.getJSONArray("items");
+        // Init values for books
+        String imageLink = "";
+        String title;
+        String description = "";
+        String publisher = "";
+        for (int i = 0; i < bookArray.length(); i++) {
+            JSONObject bookObject = bookArray.getJSONObject(i);
+            JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
+            title = volumeObject.getString("title");
+            try {
                 JSONObject imagesObject = volumeObject.getJSONObject("imageLinks");
-                String title = volumeObject.getString("title");
-                String imageLink = imagesObject.getString("thumbnail");
-                String description = volumeObject.getString("description");
-                String publisher = volumeObject.getString("publisher");
-
-                String categorie = "";
-                ArrayList<String> authors = new ArrayList<>();
-
-                JSONArray authorsArray = volumeObject.getJSONArray("authors");
-                JSONArray categoriesArray = volumeObject.getJSONArray("categories");
-
-                for (int j = 0; i < authorsArray.length(); i++){
-                    authors.add(authorsArray.getString(j));
-                }
-                for (int j = 0; i < categoriesArray.length(); i++){
-                    categorie += categoriesArray.getString(j);
-                }
-
-                Book currentBook = new Book(-1, title, description, categorie, publisher, imageLink);
-                String bookJSON = new Gson().toJson(currentBook);
-                booksFound.add(bookJSON);
+                imageLink = imagesObject.getString("thumbnail");
+            } catch (JSONException exception) {
+                // No image available
+            }
+            try {
+                description = volumeObject.getString("description");
+            }   catch (JSONException exception){
+                // No description available
+            }
+            try {
+                publisher = volumeObject.getString("publisher");
+            }   catch (JSONException exception){
+                // No publisher available
             }
 
+            String categorie = "";
+            ArrayList<String> authors = new ArrayList<>();
+
+            JSONArray authorsArray = volumeObject.getJSONArray("authors");
+            JSONArray categoriesArray = volumeObject.getJSONArray("categories");
+
+            for (int j = 0; i < authorsArray.length(); i++) {
+                authors.add(authorsArray.getString(j));
+            }
+            for (int j = 0; i < categoriesArray.length(); i++) {
+                categorie += categoriesArray.getString(j);
+            }
+
+            Book currentBook = new Book(-1, title, description, categorie, publisher, imageLink);
+            // Converting book to JSON
+            String bookJSON = new Gson().toJson(currentBook);
+            booksFound.add(bookJSON);
+            // Converting book list to JSON
             String jsonBooks = new Gson().toJson(booksFound);
 
-            // Go back to main activity
+            // Go back to main activity with books found
             Intent intent = new Intent(ctx, BookListViewActivity.class);
             intent.putExtra("books", jsonBooks);
             intent.putExtra("addMode", true);
             ctx.startActivity(intent);
         }
-
-        catch (JSONException exception){
-            // Handle exception
-            Log.v("EXCEPTION", exception.getMessage());
-        }
     }
 
-    public static void launchRequestToFindBook(String isbn){
+    public static void launchRequestToFindBook(String isbn) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(ctx);
         //String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn + "isbn";
@@ -154,8 +155,11 @@ public class AddBookActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // Parse the response JSON
-                        Log.v("HTTP", "RESPONSE");
-                        parseGetResponse(response);
+                        try {
+                            parseGetResponse(response);
+                        }   catch (JSONException exception){
+                            // PARSING ERROR
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -182,38 +186,36 @@ public class AddBookActivity extends AppCompatActivity {
             } else {
 
             }
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
-    protected void buildButtonsAction(){
+    protected void buildButtonsAction() {
         this.scanButton = (FloatingActionButton) findViewById(R.id.scanBookButton);
         this.scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*Intent intent = new Intent(v.getContext(), BarcodeCaptureActivity.class);
+                Intent intent = new Intent(v.getContext(), BarcodeCaptureActivity.class);
                 intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
                 intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
-                startActivityForResult(intent, RC_BARCODE_CAPTURE);*/
-                launchRequestToFindBook("9782876918740");
+                startActivityForResult(intent, RC_BARCODE_CAPTURE);
             }
         });
     }
 
-        View.OnClickListener myhandler1 = new View.OnClickListener() {
-            public void onClick(View v) {
-                //insertValues(3,titre.getText().toString(),auteur.getText().toString(),genre.getText().toString(),serie.getText().toString(),editeur.getText().toString());
-                Intent intent = new Intent(v.getContext(), BookListViewActivity.class);
-                startActivity(intent);
-            }
-        };
+    View.OnClickListener myhandler1 = new View.OnClickListener() {
+        public void onClick(View v) {
+            //insertValues(3,titre.getText().toString(),auteur.getText().toString(),genre.getText().toString(),serie.getText().toString(),editeur.getText().toString());
+            Intent intent = new Intent(v.getContext(), BookListViewActivity.class);
+            startActivity(intent);
+        }
+    };
 
-        View.OnClickListener myhandler2 = new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), BookListViewActivity.class);
-                startActivity(intent);
-            }
-         };
+    View.OnClickListener myhandler2 = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), BookListViewActivity.class);
+            startActivity(intent);
+        }
+    };
 
 }

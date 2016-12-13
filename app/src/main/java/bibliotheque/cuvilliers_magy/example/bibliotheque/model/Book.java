@@ -78,4 +78,8 @@ public class Book {
         this.image = image;
     }
 
+    public String getAllAuthors(){
+        return "";
+    }
+
 }
