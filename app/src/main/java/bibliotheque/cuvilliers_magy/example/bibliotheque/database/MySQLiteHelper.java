@@ -6,13 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 
 /**
@@ -37,7 +31,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String DATABASE_CREATE_BOOK = "" +
             "CREATE TABLE IF NOT EXISTS book (id integer primary key autoincrement, title VARCHAR(50)," +
             "description VARCHAR(500), categorie VARCHAR(100)," +
-            "publisher VARCHAR(30), image integer);\n";
+            "publisher VARCHAR(30), image VARCHAR(200));\n";
 
     public static final String DATABASE_CREATE_BOOK_BY_AUTHOR = "" +
             "CREATE TABLE IF NOT EXISTS book_by_author (idBook integer, idAuthor integer," +
@@ -78,8 +72,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(DESCRITPION_COLUMN, book.getDescription());
         values.put(CATEGORIE_COLUMN, book.getCategorie());
         values.put(PUBLISHER_COLUMN, book.getPublisher());
-        values.put(IMAGE_COLUMN, R.drawable.titeuf);
-        long ret = database.insertWithOnConflict(BOOK_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        values.put(IMAGE_COLUMN, book.getImage());
+        database.insertWithOnConflict(BOOK_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public static void deleteBookByID(String bookID){
@@ -97,7 +91,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         columns[4] = PUBLISHER_COLUMN;
         columns[5] = IMAGE_COLUMN;
 
-        Cursor cursor = database.query(true, "livre", columns, "titre" + " LIKE ?",
+        Cursor cursor = database.query(true, BOOK_TABLE, columns, TITLE_COLUMN + " LIKE ?",
                 new String[] {"%"+ query + "%" }, null, null, null,
                 null);
 

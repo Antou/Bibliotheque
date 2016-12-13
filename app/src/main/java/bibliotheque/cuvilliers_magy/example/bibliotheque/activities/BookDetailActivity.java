@@ -21,9 +21,11 @@ import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
 public class BookDetailActivity extends AppCompatActivity {
 
     private String currentBookID;
-    private Book currentBook;
     private FragmentManager fm = this.getFragmentManager();
     private boolean addMode;
+    private FloatingActionButton deleteButton;
+    private FloatingActionButton confirmAddButton;
+    private static Book currentBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +35,27 @@ public class BookDetailActivity extends AppCompatActivity {
         this.addMode = intent.getBooleanExtra("addMode", false);
         String bookJSON = intent.getStringExtra("book");
         this.currentBook = new Gson().fromJson(bookJSON, Book.class);
+
+        this.deleteButton = (FloatingActionButton) findViewById(R.id.deleteButton);
+        this.confirmAddButton = (FloatingActionButton) findViewById(R.id.validateAddBookButton);
+
+        if (this.addMode) {
+            this.deleteButton.hide();
+        } else {
+            this.confirmAddButton.hide();
+        }
+
         FragmentTransaction fTransaction = this.fm.beginTransaction();
         final BookDetailFragment bookFragment = new BookDetailFragment();
         bookFragment.setBook(this.currentBook);
         fTransaction.replace(R.id.bookFragment, bookFragment);
         fTransaction.commit();
 
-        final FloatingActionButton confirmAddButton = (FloatingActionButton) findViewById(R.id.validateAddBookButton);
-        final FloatingActionButton deleteButton = (FloatingActionButton) findViewById(R.id.deleteButton);
-
         // Setting button to use onClick method on them
         if (!this.addMode){
             confirmAddButton.hide();
             this.currentBookID = bookFragment.getBookID();
-            deleteButton.setOnClickListener(new View.OnClickListener() {
+            this.deleteButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // First delete book in database
                     MySQLiteHelper.deleteBookByID(currentBookID);
@@ -56,8 +65,8 @@ public class BookDetailActivity extends AppCompatActivity {
             });
         }
         else {
-            deleteButton.hide();
-            confirmAddButton.setOnClickListener(new View.OnClickListener() {
+            this.deleteButton.hide();
+            this.confirmAddButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Add book in database
                     MySQLiteHelper.addBook(currentBook);
@@ -67,5 +76,5 @@ public class BookDetailActivity extends AppCompatActivity {
             });
         }
     }
-
 }
+

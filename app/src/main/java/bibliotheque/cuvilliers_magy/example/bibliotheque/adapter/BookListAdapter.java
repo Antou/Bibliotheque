@@ -3,11 +3,7 @@ package bibliotheque.cuvilliers_magy.example.bibliotheque.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.activities.BookListViewActivity;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.model.Book;
-
-import static bibliotheque.cuvilliers_magy.example.bibliotheque.activities.AddBookActivity.resources;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
 public class BookListAdapter extends BaseAdapter implements View.OnClickListener {
@@ -88,8 +79,10 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
             /****** View Holder Object to contain tabitem.xml file elements ******/
 
             holder = new ViewHolder();
-                holder.title = (TextView) vi.findViewById(R.id.title);
-                holder.image = (ImageView)vi.findViewById(R.id.bookImage);
+            holder.title = (TextView) vi.findViewById(R.id.title);
+            holder.image = (ImageView)vi.findViewById(R.id.bookImage);
+
+
 
             /************  Set holder with LayoutInflater ************/
             vi.setTag( holder );
@@ -107,8 +100,14 @@ public class BookListAdapter extends BaseAdapter implements View.OnClickListener
 
             /************  Set Model values in Holder elements ***********/
             holder.title.setText(tempValues.getTitle());
-            holder.image.setImageResource(R.drawable.titeuf);
-            //holder.image.setImageDrawable(this.getDrawableFromURL(tempValues.getImage()));
+            if (tempValues.getImage().length() <= 0){
+                // If no image is available
+                holder.image.setImageResource(R.drawable.titeuf);
+            }
+            else {
+                // Else get image from url
+                Picasso.with(parent.getContext()).load(tempValues.getImage()).resize(50, 50).into(holder.image);
+            }
 
             /******** Set Item Click Listener for LayoutInflater for each row *******/
 
