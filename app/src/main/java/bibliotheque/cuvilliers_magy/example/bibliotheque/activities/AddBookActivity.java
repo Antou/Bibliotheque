@@ -49,6 +49,7 @@ public class AddBookActivity extends AppCompatActivity {
     protected EditText auteur;
     protected EditText genre;
     protected EditText editeur;
+    protected EditText resume;
 
     public static Context context;
     public static Context ctx;
@@ -77,6 +78,7 @@ public class AddBookActivity extends AppCompatActivity {
         auteur = (EditText) findViewById(R.id.auteur);
         genre = (EditText) findViewById(R.id.genre);
         editeur = (EditText) findViewById(R.id.editeur);
+        resume = (EditText) findViewById(R.id.resume);
 
         resources = getResources();
         // Set up buttons
@@ -211,13 +213,14 @@ public class AddBookActivity extends AppCompatActivity {
             String categorie = genre.getText().toString();
             String publisher = editeur.getText().toString();
             String author = auteur.getText().toString();
-            //String resume = resume.getText().toString();
+            String description = resume.getText().toString();
             ArrayList<String> authors = new ArrayList<>();
             authors.add(author);
 
-            Book bookToAdd = new Book(-1, bookTitle, authors, "", categorie, publisher, "");
+            Book bookToAdd = new Book(-1, bookTitle, authors, description, categorie, publisher, "");
             int bookID = MySQLiteHelper.addBook(bookToAdd);
             int authorID = MySQLiteHelper.addAuthor(author);
+            MySQLiteHelper.linkBookWithAuthor(bookID, authorID);
             Intent intent = new Intent(v.getContext(), BookListViewActivity.class);
             startActivity(intent);
         }

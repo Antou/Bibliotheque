@@ -80,11 +80,8 @@ public class BookDetailActivity extends AppCompatActivity {
                         for(String author : authors){
                             // Link current book with all authors
                             MySQLiteHelper.addAuthor(author);
-                            Log.v("Author", "added");
                             int authorID = MySQLiteHelper.getAuthorID(author);
-                            Log.v("Author id", "getted");
                             MySQLiteHelper.linkBookWithAuthor(bookID, authorID);
-                            Log.v("Linking", "done");
                         }
                     }
                     // Then go back to book list

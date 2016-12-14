@@ -35,6 +35,7 @@
         android:id="@+id/auteur"
         android:hint="Auteur" />
 
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,26 +43,6 @@
         android:ems="10"
         android:layout_below="@+id/auteur"
         android:layout_alignStart="@+id/auteur"
-        android:id="@+id/ISBN"
-        android:hint="Numéro ISBN" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@+id/ISBN"
-        android:layout_alignStart="@+id/ISBN"
-        android:id="@+id/serie"
-        android:hint="Série" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@+id/serie"
-        android:layout_alignStart="@+id/serie"
         android:id="@+id/genre"
         android:hint="Genre" />
 
@@ -78,18 +59,17 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
         android:layout_below="@+id/editeur"
         android:layout_alignStart="@+id/editeur"
-        android:id="@+id/annee"
-        android:hint="Année" />
+        android:id="@+id/resume"
+        android:hint="Résumé"/>
 
     <Button
         android:text="Valider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/annee"
+        android:layout_below="@+id/resume"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
         android:id="@+id/valider" />
