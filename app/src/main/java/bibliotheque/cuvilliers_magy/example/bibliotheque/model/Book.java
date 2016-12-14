@@ -23,6 +23,7 @@ public class Book {
     protected String publisher;
     protected String description;
     protected String image;
+    protected ArrayList<String> authors;
 
     public int getID(){
         return this.ID;
@@ -68,9 +69,10 @@ public class Book {
         this.image = image;
     }
 
-    public Book(int ID, String title, String description, String categorie, String publisher, String image) {
+    public Book(int ID, String title, ArrayList<String> authors, String description, String categorie, String publisher, String image) {
         super();
         this.ID = ID;
+        this.authors = authors;
         this.title = title;
         this.description = description;
         this.categorie = categorie;
@@ -78,8 +80,8 @@ public class Book {
         this.image = image;
     }
 
-    public String getAllAuthors(){
-        return "";
+    public ArrayList<String> getAllAuthors(){
+        return this.authors;
     }
 
 }

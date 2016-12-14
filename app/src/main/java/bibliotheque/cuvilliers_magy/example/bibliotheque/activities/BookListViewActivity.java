@@ -109,7 +109,6 @@ public class BookListViewActivity extends AppCompatActivity {
     public void onItemClick(int mPosition) {
         // Print details for each book when clicked on
         Book book = bookList.get(mPosition);
-        Log.v("BOOK title", book.getTitle());
         this.detailBookFragment(book);
     }
 

@@ -47,11 +47,8 @@ public class AddBookActivity extends AppCompatActivity {
     protected Button annuler;
     protected EditText titre;
     protected EditText auteur;
-    protected EditText ISBN;
-    protected EditText serie;
     protected EditText genre;
     protected EditText editeur;
-    protected EditText annee;
 
     public static Context context;
     public static Context ctx;
@@ -78,11 +75,8 @@ public class AddBookActivity extends AppCompatActivity {
 
         titre = (EditText) findViewById(R.id.titre);
         auteur = (EditText) findViewById(R.id.auteur);
-        ISBN = (EditText) findViewById(R.id.ISBN);
-        serie = (EditText) findViewById(R.id.serie);
         genre = (EditText) findViewById(R.id.genre);
         editeur = (EditText) findViewById(R.id.editeur);
-        annee = (EditText) findViewById(R.id.annee);
 
         resources = getResources();
         // Set up buttons
@@ -104,7 +98,6 @@ public class AddBookActivity extends AppCompatActivity {
             JSONObject bookObject = bookArray.getJSONObject(i);
             JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
             title = volumeObject.getString("title");
-            Log.v("Title", title);
             try {
                 JSONObject imagesObject = volumeObject.getJSONObject("imageLinks");
                 imageLink = imagesObject.getString("thumbnail");
@@ -135,14 +128,13 @@ public class AddBookActivity extends AppCompatActivity {
                 categorie += categoriesArray.getString(j);
             }
 
-            Book currentBook = new Book(-1, title, description, categorie, publisher, imageLink);
+            Book currentBook = new Book(-1, title, authors, description, categorie, publisher, imageLink);
             // Converting book to JSON
             String bookJSON = new Gson().toJson(currentBook);
             booksFound.add(currentBook);
             booksFoundJSON.add(bookJSON);
         }
         jsonBooks = new Gson().toJson(booksFoundJSON);
-        Log.v("JSON", jsonBooks);
         // Go back to main activity
         if (!searchMode) {
             Intent intent = new Intent(ctx, BookListViewActivity.class);
@@ -151,13 +143,6 @@ public class AddBookActivity extends AppCompatActivity {
             ctx.startActivity(intent);
         }
         return booksFound;
-    }
-
-    private void returnToMainActivityWithBooks(String books){
-        Intent intent = new Intent(this.getApplicationContext(), BookListViewActivity.class);
-        intent.putExtra("books", books);
-        intent.putExtra("addMode", true);
-        startActivity(intent);
     }
 
     public static void launchRequestToFindBook(String isbn) {
@@ -222,7 +207,17 @@ public class AddBookActivity extends AppCompatActivity {
 
     View.OnClickListener myhandler1 = new View.OnClickListener() {
         public void onClick(View v) {
-            //insertValues(3,titre.getText().toString(),auteur.getText().toString(),genre.getText().toString(),serie.getText().toString(),editeur.getText().toString());
+            String bookTitle = titre.getText().toString();
+            String categorie = genre.getText().toString();
+            String publisher = editeur.getText().toString();
+            String author = auteur.getText().toString();
+            //String resume = resume.getText().toString();
+            ArrayList<String> authors = new ArrayList<>();
+            authors.add(author);
+
+            Book bookToAdd = new Book(-1, bookTitle, authors, "", categorie, publisher, "");
+            int bookID = MySQLiteHelper.addBook(bookToAdd);
+            int authorID = MySQLiteHelper.addAuthor(author);
             Intent intent = new Intent(v.getContext(), BookListViewActivity.class);
             startActivity(intent);
         }

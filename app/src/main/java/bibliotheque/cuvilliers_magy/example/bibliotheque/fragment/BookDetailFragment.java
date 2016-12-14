@@ -42,7 +42,7 @@ public class BookDetailFragment extends Fragment {
         title.setText(this.book.getTitle());
 
         TextView authorView = (TextView) view.findViewById(R.id.authorFragment);
-        //authorView.setText("Auteur : " + this.book.getAuthor());
+        authorView.setText("Auteur : " + this.book.getAllAuthors());
 
         TextView resumeView = (TextView) view.findViewById(R.id.resumeFragment);
         resumeView.setText("Résumé : " + this.book.getDescription());

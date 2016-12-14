@@ -13,6 +13,8 @@ import android.widget.Button;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 import bibliotheque.cuvilliers_magy.example.bibliotheque.R;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.database.MySQLiteHelper;
 import bibliotheque.cuvilliers_magy.example.bibliotheque.fragment.BookDetailFragment;
@@ -69,7 +71,22 @@ public class BookDetailActivity extends AppCompatActivity {
             this.confirmAddButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // Add book in database
-                    MySQLiteHelper.addBook(currentBook);
+                    int bookID = MySQLiteHelper.addBook(currentBook);
+                    ArrayList<String> authors = currentBook.getAllAuthors();
+                    if (authors.isEmpty()){
+
+                    }
+                    else {
+                        for(String author : authors){
+                            // Link current book with all authors
+                            MySQLiteHelper.addAuthor(author);
+                            Log.v("Author", "added");
+                            int authorID = MySQLiteHelper.getAuthorID(author);
+                            Log.v("Author id", "getted");
+                            MySQLiteHelper.linkBookWithAuthor(bookID, authorID);
+                            Log.v("Linking", "done");
+                        }
+                    }
                     // Then go back to book list
                     startActivity(new Intent(BookDetailActivity.this, BookListViewActivity.class));
                 }
