@@ -9,20 +9,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-        <ListView
-            android:id="@+id/booklist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addBookButton"
-            android:layout_height="wrap_content"
+
+        <RelativeLayout
+            android:id="@+id/topLayout"
             android:layout_width="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            app:srcCompat="@android:drawable/ic_input_add"
-            app:backgroundTint="?attr/actionModeSplitBackground"
-            android:clickable="true" />
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:queryHint="Rechercher un livre"/>
+            </android.support.v7.widget.Toolbar>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topLayout">
+            <ListView
+                android:id="@+id/booklist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/addBookButton"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                app:srcCompat="@android:drawable/ic_input_add"
+                app:backgroundTint="?attr/actionModeSplitBackground"
+                android:clickable="true" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <include

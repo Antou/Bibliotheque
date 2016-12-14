@@ -61,7 +61,7 @@ public class AddBookActivity extends AppCompatActivity {
 
     static int RC_BARCODE_CAPTURE = 2;
 
-    static boolean searchMode = false;
+    static boolean searchMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +153,13 @@ public class AddBookActivity extends AppCompatActivity {
         return booksFound;
     }
 
+    private void returnToMainActivityWithBooks(String books){
+        Intent intent = new Intent(this.getApplicationContext(), BookListViewActivity.class);
+        intent.putExtra("books", books);
+        intent.putExtra("addMode", true);
+        startActivity(intent);
+    }
+
     public static void launchRequestToFindBook(String isbn) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(ctx);
@@ -205,11 +212,10 @@ public class AddBookActivity extends AppCompatActivity {
         this.scanButton = (FloatingActionButton) findViewById(R.id.scanBookButton);
         this.scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*Intent intent = new Intent(v.getContext(), BarcodeCaptureActivity.class);
+                Intent intent = new Intent(v.getContext(), BarcodeCaptureActivity.class);
                 intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
                 intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
-                startActivityForResult(intent, RC_BARCODE_CAPTURE);*/
-                launchRequestToFindBook("9782253139225");
+                startActivityForResult(intent, RC_BARCODE_CAPTURE);
             }
         });
     }
