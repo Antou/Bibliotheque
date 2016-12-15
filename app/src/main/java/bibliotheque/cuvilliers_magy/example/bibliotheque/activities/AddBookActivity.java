@@ -137,6 +137,7 @@ public class AddBookActivity extends AppCompatActivity {
                 // No categories available
             }
 
+
             Book currentBook = new Book(-1, title, authors, description, categorie, publisher, imageLink);
             // Converting book to JSON
             String bookJSON = new Gson().toJson(currentBook);

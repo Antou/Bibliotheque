@@ -50,6 +50,9 @@ public class BookDetailFragment extends Fragment {
         TextView editeurView = (TextView) view.findViewById(R.id.editeurFragment);
         editeurView.setText("Editeur : " + this.book.getPublisher());
 
+        TextView categorieView = (TextView) view.findViewById(R.id.categorieFragment);
+        categorieView.setText("Catégorie : " + this.book.getCategorie());
+
         ImageView imageView = (ImageView) view.findViewById(R.id.imageFragment);
         if (this.book.getImage().length() > 0){
             Picasso.with(getContext()).load(this.book.getImage()).resize(50, 50).into(imageView);
