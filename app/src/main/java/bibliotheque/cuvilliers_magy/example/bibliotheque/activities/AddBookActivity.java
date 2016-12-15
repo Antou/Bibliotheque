@@ -119,15 +119,22 @@ public class AddBookActivity extends AppCompatActivity {
 
             String categorie = "";
             ArrayList<String> authors = new ArrayList<>();
-
-            JSONArray authorsArray = volumeObject.getJSONArray("authors");
-            JSONArray categoriesArray = volumeObject.getJSONArray("categories");
-
-            for (int j = 0; i < authorsArray.length(); i++) {
-                authors.add(authorsArray.getString(j));
+            try {
+                JSONArray authorsArray = volumeObject.getJSONArray("authors");
+                for (int j = 0; i < authorsArray.length(); i++) {
+                    authors.add(authorsArray.getString(j));
+                }
+            }   catch(JSONException exception){
+                // No authors available
             }
-            for (int j = 0; i < categoriesArray.length(); i++) {
-                categorie += categoriesArray.getString(j);
+
+            try {
+                JSONArray categoriesArray = volumeObject.getJSONArray("categories");
+                for (int j = 0; i < categoriesArray.length(); i++) {
+                    categorie += categoriesArray.getString(j);
+                }
+            }   catch(JSONException exception){
+                // No categories available
             }
 
             Book currentBook = new Book(-1, title, authors, description, categorie, publisher, imageLink);
@@ -149,8 +156,8 @@ public class AddBookActivity extends AppCompatActivity {
 
     public static void launchRequestToFindBook(String isbn) {
         // Instantiate the RequestQueue.
+        Log.v("Request", "init");
         RequestQueue queue = Volley.newRequestQueue(ctx);
-        //String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn + "isbn";
         String url = "https://www.googleapis.com/books/v1/volumes?q=" + isbn;
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -159,6 +166,7 @@ public class AddBookActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Parse the response JSON
                         try {
+                            Log.v("Response", "Request response");
                             parseGetResponse(response);
                         } catch (JSONException exception) {
                             // PARSING ERROR

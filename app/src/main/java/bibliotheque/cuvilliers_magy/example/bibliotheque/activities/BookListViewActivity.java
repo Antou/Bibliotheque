@@ -175,6 +175,7 @@ public class BookListViewActivity extends AppCompatActivity {
                                     bookList = AddBookActivity.parseGetResponse(response);
                                 } catch (JSONException exception) {
                                     // Error
+                                    Log.v("Exception", exception.getMessage());
                                 }
                                 adapter = new BookListAdapter(customListView, bookList, res);
                                 list.setAdapter(adapter);
